@@ -13,10 +13,11 @@ class World {
     ctx;
 
     // der Konstruktor wird ausgeführt sobald eine Instanz von der jeweiligen Klasse erstellt wird (in diese Fall der Klasse World)
-    constructor(canvas) {
+    constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas
         this.draw();
+        this.keyboard = keyboard
     }
 
 

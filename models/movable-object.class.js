@@ -5,6 +5,8 @@ class MovableObject {
     width = 100;
     height = 150;
     imageCache = {};
+    currentImage = 0;
+    speed = 0.1;
 
 
     loadImage(path) {
@@ -24,9 +26,10 @@ class MovableObject {
 
         
     moveLeft() {
-        console.log('moving left')
+        setInterval( () => {
+            this.x -= this.speed;
+        }, 1000 / 60)
     }
-    
 
     moveRight() {
         console.log('moving right')
