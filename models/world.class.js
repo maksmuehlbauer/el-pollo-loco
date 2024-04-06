@@ -11,15 +11,22 @@ class World {
     ];
     canvas;
     ctx;
+    keyboard;
+
 
     // der Konstruktor wird ausgeführt sobald eine Instanz von der jeweiligen Klasse erstellt wird (in diese Fall der Klasse World)
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
-        this.canvas = canvas
+        this.canvas = canvas;
+        this.keyboard = keyboard;
         this.draw();
-        this.keyboard = keyboard
+        this.setWorld();
     }
 
+    // Link so that you can access all variables in the World class with the Character class (Primary for keyboard Class)
+    setWorld() {
+        this.character.world = this
+    }
 
     draw() {
         // Clear Canvas per Frame
@@ -44,8 +51,20 @@ class World {
         })
     }
 
+
     addToMap(mo) {
-        this.ctx.drawImage(mo.img, mo.x, mo.y, mo.width, mo.height)
+        if (mo.otherDirection) {
+            this.ctx.save();
+            this.ctx.translate(mo.width, 0);
+            this.ctx.scale(-1, 1);
+            mo.x = mo.x * -1;
+        }
+        this.ctx.drawImage(mo.img, mo.x, mo.y, mo.width * 1, mo.height)
+
+        if (mo.otherDirection) {
+            mo.x = mo.x * -1;
+            this.ctx.restore();
+        }
     }
     
 }
