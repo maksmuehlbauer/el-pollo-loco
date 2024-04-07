@@ -11,9 +11,8 @@ function init() {
     // console.log('My Char is, ', world.character)
     // console.log('My Enemy is, ', world.enemies[0])
 
-    
-
 }
+
 
 window.addEventListener("keydown", (event) => {
     // console.log(event)
