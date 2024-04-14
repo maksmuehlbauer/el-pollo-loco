@@ -3,13 +3,16 @@ let world;
 let keyboard = new Keyboard();
 
 
+
 function init() {
     canvas = document.getElementById('canvas');
     world = new World(canvas, keyboard);
 
 
-    console.log('My Char is, ', world.character)
-    console.log('My Enemy is, ', world.level.enemies[0])
+    // console.log('My Char is, ', world.character)
+    // console.log('My Enemy is, ', world.level.enemies[0])
+    // console.log('Statusbar, ', world.statusBarHp)
+    // console.log('Statusbar, ', world.level.bottles)
 
 }
 
@@ -35,6 +38,9 @@ window.addEventListener("keydown", (event) => {
     if (event.keyCode === 32) {
         keyboard.SPACE = true;
     }
+    if (event.keyCode === 68) {
+        keyboard.THROW = true;
+    }
 });
 
 window.addEventListener("keyup", (event) => {
@@ -58,5 +64,13 @@ window.addEventListener("keyup", (event) => {
     if (event.keyCode === 32) {
         keyboard.SPACE = false;
     }
+    if (event.keyCode === 68) {
+        keyboard.THROW = false;
+    }
 });
 
+
+// function startGame() {
+//     document.getElementById('canvas').style.display = 'block';
+//     document.getElementById('intro-screen').style.display = 'none'
+// }
