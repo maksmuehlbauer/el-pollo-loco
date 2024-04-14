@@ -48,11 +48,12 @@ class World {
     
     startBossFight() {
         setInterval(() => {
+        let endboss = this.level.enemies.findIndex(enemy => enemy instanceof Endboss);
             if (this.character.x > 2000) {
-                this.level.enemies[3].move()
+                this.level.enemies[endboss].move()
             }
         }, 200)
-    }
+    }    
     
 
     checkThrowObejcts() {
@@ -119,7 +120,7 @@ class World {
 
     removeDeadObjectFromWorld(enemyIndex) {
         let endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
-        if (endboss) {
+        if (endboss === Endboss) {
             setTimeout(() => {
                 this.level.enemies.splice(enemyIndex, 1)
             }, 3000);
