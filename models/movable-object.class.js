@@ -3,7 +3,7 @@ class MovableObject extends DrawableObject {
     otherDirection = false;
     speedY = 0;
     acceleration = 2.5;
-    energy = 100;
+    energy = 10000;
     lastHit = 0;
     throwSpeed = 20;
 
@@ -17,6 +17,7 @@ class MovableObject extends DrawableObject {
         }, 1000 / 30)
     }
 
+    
     isAboveGround() {
         if (this instanceof ThrowableObject) {
             return true;
@@ -45,6 +46,7 @@ class MovableObject extends DrawableObject {
 
     isDead() {
         return this.energy === 0;
+        
     }
 
 

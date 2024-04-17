@@ -1,5 +1,5 @@
 
-const level1 = new Level(
+level1 = new Level(
     [
         new Chicken(), 
         new Chicken(), 
@@ -47,5 +47,5 @@ const level1 = new Level(
     [
         new CoinObject('img/8_coin/coin_2.png', 300, 325)
     ]
-)
 
+);

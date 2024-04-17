@@ -11,10 +11,6 @@ class World {
     statusBarBottle = new StatusBarBottle();
     throwableObject = [];
 
-    
-     
-  
-
 
 
     // der Konstruktor wird ausgeführt sobald eine Instanz von der jeweiligen Klasse erstellt wird (in diese Fall der Klasse World)
@@ -24,10 +20,10 @@ class World {
         this.keyboard = keyboard;
         this.draw();
         this.setWorld();
-        // this.checkCollisions();
         this.run();
         this.startBossFight()
-        this.addNewObjectsToMap();
+        this.gameOver()
+      
 
     }
 
@@ -36,6 +32,12 @@ class World {
         this.character.world = this
     }
 
+    // gameOver() {
+    //     if (this.character.energy <= 0) {
+    //         document.getElementById('canvas').innerHTML = `<h1>test</h1>`
+    //         console.log('test')
+    //     }
+    // }
 
     run() {
         setInterval(() => {
@@ -120,7 +122,7 @@ class World {
 
     removeDeadObjectFromWorld(enemyIndex) {
         let endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
-        if (endboss === Endboss) {
+        if (endboss === endboss) {
             setTimeout(() => {
                 this.level.enemies.splice(enemyIndex, 1)
             }, 3000);
@@ -155,6 +157,27 @@ class World {
         });
     }
 
+    gameOver() {
+        setInterval(() => {
+            if (this.character.energy <= 0) {
+                document.getElementById('game-overlay').style.display = "flex";
+                document.getElementById('game-overlay').classList.add('red-rect')
+                document.getElementById('game-overlay').innerHTML += /*html*/`
+                    <button id="retry-btn" class="button" onclick="retryLevel()">Retry</button>
+                    <button id="main-menu" class="button" onclick="MainMenu()">Main Menu</button>
+                `;
+                document.getElementById('canvas').style.display = "none";
+                document.getElementById('retry-btn').style.display = "block";
+                document.getElementById('main-menu').style.display = "block";
+                document.getElementById('game-over-txt').style.display = "block";
+            }
+        }, 200);
+
+    }
+
+
+
+
 
     draw() {
         // Clear Canvas per Frame
@@ -169,19 +192,69 @@ class World {
         this.addObjectsToMap(this.level.collectableCoins)
         this.addObjectsToMap(this.throwableObject)
         this.addToMap(this.character)
-        // this.addToMap(this.endboss)
-        
+
         this.ctx.translate(-this.camera_x, 0)
 
         this.addToMap(this.statusBarHp)
         this.addToMap(this.statusBarCoin)
         this.addToMap(this.statusBarBottle)
 
+ 
+
+
+
          let self = this
         requestAnimationFrame(function() {
             self.draw();
         });
     }
+
+    // showGameOverRect() {
+    //     // this.ctx.filter = "blur(5px)"; komischer strich im hintergrund
+    //     this.ctx.fillStyle = "rgba(255,0,0,1.5)";
+    //     this.ctx.fillRect(0, 0 ,this.canvas.width ,this.canvas.height);
+    // }
+
+
+    // drawGameOverText() {
+    //     let text = "Game Over"
+    //     let textWidth = this.ctx.measureText(text).width;
+    //     let x = (canvas.width - textWidth) / 2;
+    //     let y = canvas.height / 2;
+    //     this.ctx.font = "bold 48px Sancreek"
+    //     this.ctx.fillStyle = "black";
+    //     this.ctx.fillText(text, x, y);
+    // }
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     addObjectsToMap(objects) {
@@ -191,10 +264,21 @@ class World {
     }
 
 
-    addNewObjectsToMap() {
-        this.addNewBottlesToMap();
-        this.addNewChickensToMap();
+    addToMap(mo) {
+        if (mo.otherDirection) {
+            this.flipImage(mo)
+        }
+        mo.draw(this.ctx)
+        mo.drawFrame(this.ctx)
+        if (mo.otherDirection) {
+            this.flipImageBack(mo)
+        }
     }
+
+    // addNewObjectsToMap() {
+    //     this.addNewBottlesToMap();
+    //     this.addNewChickensToMap();
+    // }
 
 
     addNewBottlesToMap() {
@@ -211,16 +295,7 @@ class World {
     }
 
 
-    addToMap(mo) {
-        if (mo.otherDirection) {
-            this.flipImage(mo)
-        }
-        mo.draw(this.ctx)
-        mo.drawFrame(this.ctx)
-        if (mo.otherDirection) {
-            this.flipImageBack(mo)
-        }
-    }
+
 
 
     flipImage(mo) {
