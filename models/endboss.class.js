@@ -52,7 +52,7 @@ class Endboss extends MovableObject {
         this.loadImages(this.IMAGES_WALK)
         this.loadImages(this.IMAGES_DEAD)
         this.loadImages(this.IMAGES_HURT)
-        this.x = 2200;
+        this.x = 5100;
         this.energy = 60;
         this.animate()
                
@@ -61,10 +61,10 @@ class Endboss extends MovableObject {
 
     animate() {
         setInterval(() => {
-            if (this.x === 2200) {
+            if (this.x === 5100) {
                 this.playAnimation(this.IMAGES_ALERT)
             }
-            if (this.x < 2200) {
+            if (this.x < 5099) {
                 this.playAnimation(this.IMAGES_WALK)
             }
             if (this.x < 2100) {

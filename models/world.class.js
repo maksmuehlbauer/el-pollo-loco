@@ -10,6 +10,7 @@ class World {
     statusBarCoin = new StatusBarCoin();
     statusBarBottle = new StatusBarBottle();
     throwableObject = [];
+    collectedCoins = 0;
 
 
 
@@ -18,26 +19,28 @@ class World {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
-        this.draw();
+        // this.draw();
         this.setWorld();
         this.run();
-        this.startBossFight()
-        this.gameOver()
+        this.startBossFight();
+        this.gameOver();
+        this.fillWorldWithChickens();
       
 
+    }
+
+
+    fillWorldWithChickens() {
+        for (let i = 0; i < 40; i++) {
+            this.level.enemies.push(new Chicken());
+            
+        }
     }
 
     // Link so that you can access all variables in the World class with the Character class (Primary for keyboard Class)
     setWorld() {
         this.character.world = this
     }
-
-    // gameOver() {
-    //     if (this.character.energy <= 0) {
-    //         document.getElementById('canvas').innerHTML = `<h1>test</h1>`
-    //         console.log('test')
-    //     }
-    // }
 
     run() {
         setInterval(() => {
@@ -51,7 +54,7 @@ class World {
     startBossFight() {
         setInterval(() => {
         let endboss = this.level.enemies.findIndex(enemy => enemy instanceof Endboss);
-            if (this.character.x > 2000) {
+            if (this.character.x > 4600) {
                 this.level.enemies[endboss].move()
             }
         }, 200)
@@ -78,7 +81,6 @@ class World {
             }, 1500);
         }
     }
-
 
 
     checkCollisions() {
@@ -114,24 +116,6 @@ class World {
     }
 
 
-    enemyDies(enemyIndex) {
-        return this.level.enemies[enemyIndex].energy <= 0
-    }
-
-
-
-    removeDeadObjectFromWorld(enemyIndex) {
-        let endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
-        if (endboss === endboss) {
-            setTimeout(() => {
-                this.level.enemies.splice(enemyIndex, 1)
-            }, 3000);
-        } else {
-            this.level.enemies.splice(enemyIndex, 1)
-        }
-    }
-
-
     collisionBottleObject() {
         this.level.collectableBottles.forEach((collectObject) => {
             if (this.statusBarBottle.bottlesFull()) { 
@@ -149,12 +133,30 @@ class World {
         this.level.collectableCoins.forEach((collectObject) => {
             if (this.statusBarCoin.coinsFull()) { 
                 if (this.character.isColliding(collectObject)) {
-                    this.statusBarCoin.setPercentage(this.statusBarCoin.percentage += 20)
+                    this.collectedCoins += 1;
+                    this.statusBarCoin.setPercentage(this.statusBarCoin.percentage += 0)
                     let collectableObjectIndex = this.level.collectableCoins.indexOf(collectObject)
                     this.level.collectableCoins.splice(collectableObjectIndex, 1)
                 }
             }
         });
+    }
+
+
+    enemyDies(enemyIndex) {
+        return this.level.enemies[enemyIndex].energy <= 0
+    }
+
+
+    removeDeadObjectFromWorld(enemyIndex) {
+        let endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
+        if (endboss === endboss) {
+            setTimeout(() => {
+                this.level.enemies.splice(enemyIndex, 1)
+            }, 3000);
+        } else {
+            this.level.enemies.splice(enemyIndex, 1)
+        }
     }
 
     gameOver() {
@@ -227,35 +229,6 @@ class World {
     // }
 
     
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     addObjectsToMap(objects) {
         objects.forEach( object => {

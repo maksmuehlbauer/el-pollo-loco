@@ -1,5 +1,5 @@
 class StatusBarCoin extends StatusBar {
-    percentage = 60
+    percentage = 0
     emptyCoins = 0
     fullCoins = 100
 

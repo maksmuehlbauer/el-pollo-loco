@@ -7,9 +7,8 @@ let keyboard = new Keyboard();
 function init() {
     loadingStartScreen();
     canvas = document.getElementById('canvas');
-    world = new World(canvas, keyboard);
-    
-    // console.log('My Char is, ', world.character)
+    startGame() 
+
 }
 
 
@@ -25,6 +24,7 @@ function loadingStartScreen() {
 
 function retryLevel() {
     console.log('retry')
+    startGame()
     
 }
 
@@ -38,8 +38,8 @@ function startGame() {
     document.getElementById('canvas').style.display = "block";
     document.getElementById('img-container').style.display = "none";
     document.getElementById('canvas-container').style.height = "480px";
-    initLevel();
-
+    world = new World(canvas, keyboard);
+    world.draw();
 }
 
 

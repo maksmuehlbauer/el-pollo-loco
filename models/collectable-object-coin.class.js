@@ -1,6 +1,6 @@
 class CoinObject extends CollectableObjects {
-    width = 140;
-    height = 140;
+    width = 40;
+    height = 40;
 
 
     constructor(imagePath, x, y,) {
