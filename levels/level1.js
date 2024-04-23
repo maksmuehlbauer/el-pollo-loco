@@ -4,11 +4,6 @@ let level1;
 level1 = new Level(
     [
         new Endboss(),
-        new Chicken(), 
-        new Chicken(), 
-        new Chicken()
-
-        
     ],
     [
         new Cloud('img/5_background/layers/4_clouds/1.png', 0, 0),
@@ -128,7 +123,6 @@ level1 = new Level(
         new CoinObject('img/8_coin/coin_1.png', 5150, 50),
         new CoinObject('img/8_coin/coin_1.png', 5100, 150),
         new CoinObject('img/8_coin/coin_1.png', 5150, 150)  
-        // 38 Coins
     ]
 
 );

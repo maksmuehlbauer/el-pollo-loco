@@ -1,78 +1,117 @@
 let canvas;
 let world;
 let keyboard = new Keyboard();
+let scores = [];
 
+loadScores();
 
 
 function init() {
-    loadingStartScreen();
     canvas = document.getElementById('canvas');
-    startGame() 
-
+    // startGame() 
+    // showScoreBoard();
 }
 
 
-function loadingStartScreen() {
-    document.getElementById('canvas-container').innerHTML += /*html*/`
-        <div id="img-container">
-            <button id="help-btn" class="button d-block" onclick="helpFAQ()">Help</button>
-            <button id="start-btn" class="button d-block" onclick="startGame()">Start</button>
-        </div>
-    `
-}
-
-
-function retryLevel() {
-    console.log('retry')
+function retryLevel(id) {
+    document.getElementById('show-scores-box').remove()
+    document.getElementById('game-overlay').classList.remove(id)
     startGame()
-    
 }
+
 
 function MainMenu() {
     console.log('Main Menu')
     window.location.href = 'index.html'
 }
 
+
 function startGame() {
-    hideStartScreen();
-    document.getElementById('canvas').style.display = "block";
-    document.getElementById('img-container').style.display = "none";
-    document.getElementById('canvas-container').style.height = "480px";
+    document.getElementById('game-overlay').style.display = "none";
     world = new World(canvas, keyboard);
     world.draw();
 }
 
 
-function helpFAQ() {
-    hideStartScreen();
-    document.getElementById('img-container').innerHTML += /*html*/`
-    <button class="button menu-btn" onclick="MainMenu()">Main Menu</button>
+function helpFaqHTML() {
+    document.getElementById('game-overlay').innerHTML = /*html*/`
+        <a href="index.html" class="button btn-back">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+               <polygon points="70,20 70,80 20,50" fill="currentColor"/>
+            </svg>
+        </a>
         <div id="rules">
-        
             <h2>Rules:</h2>
-            <p>1. Throw bottles at the chickens to clear a path to the final boss.</p>
-            <p>2. You can also jump over the chickens but it won't do any harm</p>
-            <p>3. Defeat the final boss to complete the level.</p>
+            <p>1. Defeat the final boss, to save your Scores</p>
+            <p>2. Loosing dont save scores</p>
+            <p>3. measured values = Time > Coins > defeated Chickens</p>
             <p>4. if your energy bar drops to zero, you lose.</p>
-            
+            <p>5. Check your stats at the leaderboard</p>
+
             <h2>Game Mechanics:</h2>
             <p>1. You can throw one bottle every 1.5/sek</p>
             <p>2. You can hold 5 bottles max.</p>
-            <p>3. Normal Chickens are one shot, Boss have more energy</p>
+            <p>3. Normal and small Chickens are one shot, Boss have more energy</p>
             <p>4. From time to time there spawn new enemys and bottles</p>
-            
         </div>
     `
 }
 
 
-function hideStartScreen() {
-    document.getElementById('help-btn').style.display = "none";
-    document.getElementById('start-btn').style.display = "none";
-
+function showScoreBoard() {
+    sortScores();
+    let topFiveScores = scores.slice(0, 5)
+    document.getElementById('game-overlay').innerHTML = showScoreBoardHTML(); 
+    let scoreTable = document.getElementById('score-table');
+    topFiveScores.forEach((score, i) => {
+        scoreTable.innerHTML += leaderboardTableHTML(i, score);
+    })
 }
 
 
+function sortScores() {
+    scores.sort((a, b) => {
+        if (parseInt(a.time) !== parseInt(b.time)) {
+            return parseInt(b.time) - parseInt(a.time);
+        }
+        if (a.coins !== b.coins) {
+            return b.coins - a.coins;
+        }
+        return b.chickens - a.chickens;
+    });
+}
+
+
+function showScoreBoardHTML() {
+    return /*html*/`
+    <a href="index.html" class="button btn-back">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+           <polygon points="70,20 70,80 20,50" fill="currentColor"/>
+        </svg>
+    </a>
+    <div id="rules">
+        <h2>Scoreboard</h2>
+        <table id="score-table">
+            <tr>
+                <th>Nr.</th>
+                <th><img src="img/10_interactions/time.png" class="img-time"></th>
+                <th><img src="img/8_coin/coin_1.png"></th>
+                <th><img src="img/3_enemies_chicken/chicken_normal/1_walk/1_w.png"></th>
+            <tr>
+        </table>
+    </div>
+`
+}
+
+
+function leaderboardTableHTML(i, score) {
+    return /*html*/`
+    <td>#${i + 1}</td>
+    <td>${score.time} s</td>
+    <td>${score.coins}</td>
+    <td>${score.chickens}</td>
+    `
+}
 
 
 window.addEventListener("keydown", (event) => {
@@ -101,6 +140,7 @@ window.addEventListener("keydown", (event) => {
     }
 });
 
+
 window.addEventListener("keyup", (event) => {
     // console.log(event)
     if (event.keyCode === 39) {
@@ -128,3 +168,9 @@ window.addEventListener("keyup", (event) => {
 });
 
 
+function loadScores() {
+    let ScoresAsText = localStorage.getItem("Scores");
+    if (scores) {
+        scores = JSON.parse(ScoresAsText);
+    }
+  }

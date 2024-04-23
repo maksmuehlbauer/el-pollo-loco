@@ -16,8 +16,8 @@ class StatusBarBottle extends StatusBar {
         super();
         this.loadImages(this.IMAGES);
         this.setPercentage(this.percentage);
-        this.x = 20;
-        this.y = 80;
+        this.x = 180;
+        this.y = 0;
     }
 
     bottlesvAvailable() {

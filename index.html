@@ -17,6 +17,10 @@
     <script src="models/collectable-object-coin.class.js"></script>
     <script src="models/character.class.js"></script>
     <script src="models/chicken.class.js"></script>
+    <script src="models/chicken-small.class.js"></script>
+    <script src="models/coin-count.class.js"></script>
+    <script src="models/killed-chicken-count.class.js"></script>
+    <script src="models/play-time.class.js"></script>
     
     <script src="models/world.class.js"></script>
 
@@ -32,16 +36,31 @@
 </head>
 <body id="body" onload="init()">
     <h1>El Pollo Loco</h1>
-        <div id="canvas-container">
-            
-            <div id="game-overlay"></div>
-            <canvas id="canvas" width="720" height="480"></canvas>            
-            <h1 id="game-over-txt">Game Over</h1>
-
-            
+        <div id="canvas-box">
+            <div id="game-overlay">
+                <div id="btn-box">
+                    <a href="#" class="button" onclick="showScoreBoard()">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="80" height="80">
+                            <!-- Kreis für die Medaille -->
+                            <circle cx="50" cy="50" r="30" fill="none" stroke="black" stroke-width="3"/>
+                            <!-- Nummer im Kreis -->
+                            <text x="50" y="60" text-anchor="middle" font-family="Arial, sans-serif" font-size="32" font-weight="bold" fill="black">#1</text>
+                        </svg>
+                    </a>
+                    <a href="#" class="button" onclick="helpFaqHTML()">?</a>
+                    <a href="#" class="button" onclick="startGame()">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+                            <polygon points="30,20 30,80 80,50" fill="currentColor"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+                <canvas id="canvas" width="720" height="480"></canvas>            
         </div>
         <div id="movement-box">
-            <h3>left/right Arrow = Movement -- D = Throw Bottle -- Space = Jump</h3>
+            <h3>left/right Arrow = Movement</h3>
+            <h3>D = Throw Bottle</h3>
+            <h3>Space = Jump</h3>
         </div>
 
 

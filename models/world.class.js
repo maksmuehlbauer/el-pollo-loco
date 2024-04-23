@@ -1,7 +1,6 @@
 class World {
     character = new Character();
-    // endboss = new Endboss();
-    level = level1
+    // level = level1;
     canvas;
     ctx;
     keyboard;
@@ -9,8 +8,14 @@ class World {
     statusBarHp = new StatusBarHp();
     statusBarCoin = new StatusBarCoin();
     statusBarBottle = new StatusBarBottle();
+    coinCount = new CoinCount();
+    chickenCounter = new ChickenCounter();
+    playTime = new TimeMeasurement();
     throwableObject = [];
     collectedCoins = 0;
+    killedChickens = 0;
+    bottleCoolDown = 1.5
+    scores = [];
 
 
 
@@ -19,23 +24,17 @@ class World {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
+        this.level = level1;
         // this.draw();
         this.setWorld();
         this.run();
         this.startBossFight();
         this.gameOver();
-        this.fillWorldWithChickens();
-      
-
+        this.victory();
+        this.startTime = new Date().getTime();
+        this.bottleCoolDown = 0;
     }
 
-
-    fillWorldWithChickens() {
-        for (let i = 0; i < 40; i++) {
-            this.level.enemies.push(new Chicken());
-            
-        }
-    }
 
     // Link so that you can access all variables in the World class with the Character class (Primary for keyboard Class)
     setWorld() {
@@ -44,10 +43,10 @@ class World {
 
     run() {
         setInterval(() => {
-            this.checkThrowObejcts();
+            this.checkThrowObjects();
             this.checkCollisions();
             this.removeThrownBottleFromMap()
-        }, 200)
+        }, 100)
     }
 
     
@@ -61,16 +60,14 @@ class World {
     }    
     
 
-    checkThrowObejcts() {
-        if (this.statusBarBottle.bottlesvAvailable())
-            if (this.keyboard.THROW && this.throwableObject.length === 0) {
+    checkThrowObjects() {
+        if (this.keyboard.THROW && this.throwableObject.length === this.bottleCoolDown && this.statusBarBottle.bottlesvAvailable()) {
                 this.statusBarBottle.setPercentage(this.statusBarBottle.percentage -= 20);
                 let bottle = new ThrowableObject(this.character.x, this.character.y);
                 this.throwableObject.push(bottle);
-                
                 this.removeThrownBottleFromMap(bottle);
             }
-    }
+        }
 
 
     removeThrownBottleFromMap(bottle) {
@@ -108,7 +105,9 @@ class World {
                     let enemyIndex = this.level.enemies.indexOf(enemy)
                     this.level.enemies[enemyIndex].hit(20)
                     if (this.enemyDies(enemyIndex)) {
+                        this.level.enemies[enemyIndex].speed = 0;
                         this.removeDeadObjectFromWorld(enemyIndex)
+                        this.killedChickens += 1
                     }
                 }
             });
@@ -148,38 +147,106 @@ class World {
     }
 
 
+
     removeDeadObjectFromWorld(enemyIndex) {
         let endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
-        if (endboss === endboss) {
+        if (endboss !== undefined && this.level.enemies[enemyIndex] === endboss) {
             setTimeout(() => {
-                this.level.enemies.splice(enemyIndex, 1)
+                this.level.enemies.splice(enemyIndex, 1);
             }, 3000);
         } else {
-            this.level.enemies.splice(enemyIndex, 1)
+            setTimeout(() => {
+                this.level.enemies.splice(enemyIndex, 1);
+            }, 1000);
         }
     }
 
-    gameOver() {
-        setInterval(() => {
-            if (this.character.energy <= 0) {
-                document.getElementById('game-overlay').style.display = "flex";
-                document.getElementById('game-overlay').classList.add('red-rect')
-                document.getElementById('game-overlay').innerHTML += /*html*/`
-                    <button id="retry-btn" class="button" onclick="retryLevel()">Retry</button>
-                    <button id="main-menu" class="button" onclick="MainMenu()">Main Menu</button>
-                `;
-                document.getElementById('canvas').style.display = "none";
-                document.getElementById('retry-btn').style.display = "block";
-                document.getElementById('main-menu').style.display = "block";
-                document.getElementById('game-over-txt').style.display = "block";
+
+    victory() {
+        let endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
+        let victoryInterval = setInterval(() => {
+            if (endboss.energy <= 0) {
+                endboss.speed = 0
+                this.victoryScreen();
+                this.scores.push({
+                    "chickens" : this.killedChickens,
+                    "coins" : this.collectedCoins,
+                    "time" : this.calculateElapsedTime()
+                })
+                this.saveScores();
+                clearInterval(victoryInterval)
             }
         }, 200);
-
+        
     }
 
 
+    showScoresBoxHTML() {
+        return /*html*/`
+            <div id="show-scores-box">
+                <h1 class="victory-txt">Victory</h1>
+                <div class="counter-box">
+                    <img src="img/3_enemies_chicken/chicken_normal/1_walk/1_w.png">
+                    <h2>${this.killedChickens}</h2>
+                </div>
+                <div class="counter-box">
+                    <img src="img/8_coin/coin_1.png">
+                    <h2>${this.collectedCoins}</h2>
+                </div>
+                <div class="counter-box">
+                    <img src="img/10_interactions/time.png">
+                    <h2>${this.calculateElapsedTime()}</h2>
+                </div>
+            </div>
+        `
+    }
 
 
+    victoryScreen() {
+        document.getElementById('btn-box').innerHTML = /*html*/`
+        <a href="#" class="button" onclick="retryLevel('victory-overlay')">
+            <img src="img/10_interactions/retry.png" class="img-btn">
+        </a>
+        <a href="index.html" class="button">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" width="30" height="30">
+                <line x1="0" y1="5" x2="30" y2="5" stroke="black" stroke-width="2"/>
+                <line x1="0" y1="15" x2="30" y2="15" stroke="black" stroke-width="2"/>
+                <line x1="0" y1="25" x2="30" y2="25" stroke="black" stroke-width="2"/>
+            </svg>
+        </a>
+    `
+    document.getElementById('game-overlay').classList.add('victory-overlay')
+    document.getElementById('game-overlay').innerHTML += this.showScoresBoxHTML()
+    }
+    
+
+
+    gameOver() {
+        let gameOverInterval = setInterval(() => {
+            if (this.character.energy <= 0 ) {
+                this.showGameOverScreen()
+                clearInterval(gameOverInterval)
+
+            }
+        }, 200);
+    }
+
+    showGameOverScreen() {
+        document.getElementById('btn-box').innerHTML = /*html*/`
+            <a href="#" class="button" onclick="retryLevel('game-over-overlay')">
+                <img src="img/10_interactions/retry.png" class="img-btn">
+            </a>
+            <a href="index.html" class="button">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" width="30" height="30">
+                    <line x1="0" y1="5" x2="30" y2="5" stroke="black" stroke-width="2"/>
+                    <line x1="0" y1="15" x2="30" y2="15" stroke="black" stroke-width="2"/>
+                    <line x1="0" y1="25" x2="30" y2="25" stroke="black" stroke-width="2"/>
+                </svg>
+            </a>
+        `
+        document.getElementById('game-overlay').classList.add('game-over-overlay')
+        document.getElementById('game-overlay').innerHTML += this.showScoresBoxHTML()
+    }
 
     draw() {
         // Clear Canvas per Frame
@@ -194,15 +261,15 @@ class World {
         this.addObjectsToMap(this.level.collectableCoins)
         this.addObjectsToMap(this.throwableObject)
         this.addToMap(this.character)
-
+        
         this.ctx.translate(-this.camera_x, 0)
 
         this.addToMap(this.statusBarHp)
-        this.addToMap(this.statusBarCoin)
-        this.addToMap(this.statusBarBottle)
-
- 
-
+        this.addToMap(this.coinCount)
+        this.addToMap(this.chickenCounter)
+        this.addToMap(this.playTime)
+        this.addToMap(this.statusBarBottle);
+        this.drawPlayerCounts();
 
 
          let self = this
@@ -211,23 +278,23 @@ class World {
         });
     }
 
-    // showGameOverRect() {
-    //     // this.ctx.filter = "blur(5px)"; komischer strich im hintergrund
-    //     this.ctx.fillStyle = "rgba(255,0,0,1.5)";
-    //     this.ctx.fillRect(0, 0 ,this.canvas.width ,this.canvas.height);
-    // }
+
+    drawPlayerCounts() {
+        this.ctx.font = '18px Sancreek';
+        this.ctx.fillStyle = 'white';
+        this.ctx.fillText(this.collectedCoins, 60, 76);
+        this.ctx.fillText(this.killedChickens, 60, 112);
+        this.ctx.fillText(this.calculateElapsedTime() + ' s', 60, 148);
+        this.ctx.fillText('Cd: ' + this.lastThrowTime + ' s', 25, 180);
+    }
 
 
-    // drawGameOverText() {
-    //     let text = "Game Over"
-    //     let textWidth = this.ctx.measureText(text).width;
-    //     let x = (canvas.width - textWidth) / 2;
-    //     let y = canvas.height / 2;
-    //     this.ctx.font = "bold 48px Sancreek"
-    //     this.ctx.fillStyle = "black";
-    //     this.ctx.fillText(text, x, y);
-    // }
-
+    calculateElapsedTime() {
+        let currentTime = new Date().getTime();
+        let elapsedTime = currentTime - this.startTime;
+        elapsedTime = (elapsedTime / 1000).toFixed(0)
+        return elapsedTime
+    }
     
 
     addObjectsToMap(objects) {
@@ -242,13 +309,28 @@ class World {
             this.flipImage(mo)
         }
         mo.draw(this.ctx)
-        mo.drawFrame(this.ctx)
+        // mo.drawFrame(this.ctx)
         if (mo.otherDirection) {
             this.flipImageBack(mo)
         }
     }
 
-    // addNewObjectsToMap() {
+
+    flipImage(mo) {
+        this.ctx.save();
+        this.ctx.translate(mo.width, 0);
+        this.ctx.scale(-1, 1);
+        mo.x = mo.x * -1;
+    }
+
+
+    flipImageBack(mo) {
+        mo.x = mo.x * -1;
+        this.ctx.restore();
+    }
+
+
+    //     addNewObjectsToMap() {
     //     this.addNewBottlesToMap();
     //     this.addNewChickensToMap();
     // }
@@ -268,21 +350,23 @@ class World {
     }
 
 
-
-
-
-    flipImage(mo) {
-        this.ctx.save();
-        this.ctx.translate(mo.width, 0);
-        this.ctx.scale(-1, 1);
-        mo.x = mo.x * -1;
+    saveScores() {
+        this.loadFromStorage()
+        scores.push({
+            "chickens": this.killedChickens,
+            "coins": this.collectedCoins,
+            "time": this.calculateElapsedTime()
+        });
+        localStorage.setItem("Scores", JSON.stringify(scores));
     }
+    
 
-
-    flipImageBack(mo) {
-        mo.x = mo.x * -1;
-        this.ctx.restore();
+    loadFromStorage() {
+        if (localStorage.getItem("Scores")) {
+            scores = JSON.parse(localStorage.getItem("Scores"));
+        } else {
+            scores = [];
+        }
     }
-
 
 }
