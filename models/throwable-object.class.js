@@ -1,3 +1,4 @@
+
 class ThrowableObject extends MovableObject {
     IMAGES_BOTTLE_SPLASH = [
         'img/6_salsa_bottle/bottle_rotation/bottle_splash/1_bottle_splash.png',
@@ -20,42 +21,46 @@ class ThrowableObject extends MovableObject {
         super().loadImage('img/6_salsa_bottle/salsa_bottle.png')
         this.loadImages(this.IMAGES_BOTTLE_SPLASH);
         this.loadImages(this.IMAGES_BOTTLE_THROW);
+        this.animate();
+        this.applyGravity();
+        this.bottleFly()
         this.x = x;
         this.y = y;
         this.width = 70;
         this.height = 70;
-        this.throwBottle();
-        // this.animate();
+        this.speedY = 20; 
+        this.speedX = 15;
     }
+
 
     animate() {
-        let i = 0;
-        let interval1 = setInterval(() => {
-            if (this.y >= 370) {
-                i++
-                this.playAnimation(this.IMAGES_BOTTLE_SPLASH)
+        setInterval(() => {
+            if (this.isInAir()) {
+                this.playAnimation(this.IMAGES_BOTTLE_THROW);
+            } else {
+                this.speedY = 0; // Stoppe die vertikale Bewegung
+                this.speedX = 0;
+                this.acceleration = 0;
+                this.playAnimation(this.IMAGES_BOTTLE_SPLASH);
             }
-        }, 200)
+        }, 65);
     }
 
-    throwBottle() {
-        this.speedY = 20; 
-        this.speedX = 15
-        this.applyGravity();
-
-        setInterval(() => { 
-            this.x += this.speedX ;
-            // this.playAnimation(this.IMAGES_BOTTLE_THROW)
-            if (this.y >= 370) {
-                this.speedY = 0
-                this.speedX = 0
-                this.playAnimation(this.IMAGES_BOTTLE_SPLASH)
-            }
-
-            
-        }, 25)
-
-        
+    isInAir() {
+        return this.y < 370;
     }
+
+
+    bottleFly() {
+        setInterval(() => {
+            if (this.y < 370) {
+                this.x += this.speedX;
+            }
+        }, 30);
+    }
+
+
+
 
 }
+

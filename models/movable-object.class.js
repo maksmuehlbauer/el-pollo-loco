@@ -3,7 +3,7 @@ class MovableObject extends DrawableObject {
     otherDirection = false;
     speedY = 0;
     acceleration = 2.5;
-    energy = 100;
+    energy = 1;
     lastHit = 0;
     throwSpeed = 20;
 
@@ -22,7 +22,7 @@ class MovableObject extends DrawableObject {
         if (this instanceof ThrowableObject) {
             return true;
         } else {
-            return this.y < 150
+            return this.y < 150;
         }
     }
 
@@ -37,11 +37,13 @@ class MovableObject extends DrawableObject {
         }
     }
 
+
     isHit() {
         let timePassed = new Date().getTime() - this.lastHit;
         timePassed = timePassed / 1000;
         return timePassed < 1;  
     }
+
 
     isDead() {
         return this.energy === 0;
@@ -59,13 +61,13 @@ class MovableObject extends DrawableObject {
         
     moveLeft() {
         this.x -= this.speed;
-
     }
+
 
     moveRight() {
-        // console.log(this.x)
         this.x += this.speed;
     }
+
 
     playAnimation(images) {
         let i = this.currentImage % images.length;
@@ -74,10 +76,10 @@ class MovableObject extends DrawableObject {
         this.currentImage++;
     }
 
+
     jump() {
         return this.speedY = 30
     }
-
 }
 
 

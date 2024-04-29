@@ -53,34 +53,52 @@ class Endboss extends MovableObject {
         this.loadImages(this.IMAGES_DEAD)
         this.loadImages(this.IMAGES_HURT)
         this.x = 5100;
-        this.energy = 5;
-        this.speed = 0.2
-        this.animate()
-               
+        this.energy = 60;
+        this.speed = 10
+        this.animate();
     }
 
 
     animate() {
         setInterval(() => {
-            if (this.x === 5100) {
-                this.playAnimation(this.IMAGES_ALERT)
-            }
-            if (this.x < 5099) {
-                this.playAnimation(this.IMAGES_WALK)
-            }
-            if (this.x < 2100) {
-                this.playAnimation(this.IMAGES_ATTACK)
-            }
+            if (this.startBossFight()) {
+                this.playAnimation(this.IMAGES_WALK);
+                this.moveLeft();
+            } else if (this.x === 5100) {
+                this.playAnimation(this.IMAGES_ALERT);
+            } else if (this.distanceCharToBoss() < 100) {
+                this.playAnimation(this.IMAGES_ATTACK);
+                this.moveLeft();
+                this.speed = 1
+            } else if (this.distanceCharToBoss() < 400) {
+                this.playAnimation(this.IMAGES_ATTACK);
+                this.moveLeft();
+                this.speed = 30
+            }  else {
+                this.playAnimation(this.IMAGES_WALK);
+                this.moveLeft();
+                this.speed = 10
+            }          
             if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DEAD)
+                this.speed = 0
             }
             if (this.isHit()) {
                 this.playAnimation(this.IMAGES_HURT)
             } 
-        }, 250)
+        }, 125)
     }
 
 
+    startBossFight() {
+        return world.character.x >= 4550
+    }
+
+
+    distanceCharToBoss() {
+        let distance = Math.abs(world.character.x - this.x)
+        return distance
+    }
 
 
     move() {

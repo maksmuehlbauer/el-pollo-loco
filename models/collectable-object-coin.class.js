@@ -1,17 +1,29 @@
-class CoinObject extends CollectableObjects {
+class CoinObject extends MovableObject {
     width = 40;
     height = 40;
 
+    IMAGES_ANIMATION = [
+        'img/8_coin/coin_1.png',
+        'img/8_coin/coin_2.png'
+    ]
 
-    constructor(imagePath, x, y,) {
-        super().loadImage(imagePath);
+
+    constructor(imagepath, x, y,) {
+        super()
+        this.loadImage(imagepath);
+        this.loadImages(this.IMAGES_ANIMATION);
         this.x = x;
         this.y = y;
+        this.animate();
 
 
     }
 
-
+    animate() {
+        setInterval(() => {
+            this.playAnimation(this.IMAGES_ANIMATION)
+        }, 500);
+    }
 
 
 }
