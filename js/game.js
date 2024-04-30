@@ -8,7 +8,7 @@ loadScores();
 
 function init() {
     canvas = document.getElementById('canvas');
-    // startGame() 
+    startGame() 
     // showScoreBoard();
 }
 

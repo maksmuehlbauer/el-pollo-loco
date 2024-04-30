@@ -41,6 +41,8 @@ class Character extends MovableObject{
     world;     // Link so that you can access all variables in the World class with the Character class (Primary for keyboard Class)
     walking_sound = new Audio('audio/walk.mp3')
 
+    
+
     constructor() {
         super().loadImage('img/2_character_pepe/2_walk/W-21.png');
         this.loadImages(this.IMAGES_WALKING);
@@ -53,7 +55,6 @@ class Character extends MovableObject{
     }
 
     animate() {
-
         setInterval(() => {
             this.walking_sound.pause();
             if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
@@ -71,10 +72,10 @@ class Character extends MovableObject{
             if (this.world.keyboard.SPACE && !this.isAboveGround()) {
                 this.jump()
             }
-
             this.world.camera_x = -this.x + 100;
+            
         }, 1000 / 60)
-
+        
 
         setInterval(() => {
             if (this.isDead()) {
@@ -89,6 +90,8 @@ class Character extends MovableObject{
                 }
             }
         }, 100)
-    }
 
+       
+    }
+    
 }

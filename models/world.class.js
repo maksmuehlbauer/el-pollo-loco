@@ -122,8 +122,8 @@ class World {
 
 
     removeDeadObjectFromWorld(enemyIndex) {
-        let endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
-        if (endboss !== undefined && this.level.enemies[enemyIndex] === endboss) {
+        // let endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
+        if (this.findEndboss() !== undefined && this.level.enemies[enemyIndex] === this.findEndboss()) {
             setTimeout(() => {
                 this.level.enemies.splice(enemyIndex, 1);
             }, 3000);
@@ -169,8 +169,15 @@ class World {
                 this.pushScores();
                 this.saveScores();
                 clearInterval(victoryInterval);
+                // this.stopAllIntervals();
             }
         }, 200);
+    }
+
+    
+    findEndboss() {
+        let endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
+        return endboss;
     }
 
 
@@ -182,14 +189,14 @@ class World {
         });
     }
 
-    // is in new subworld class for testing
-    // showGameOverScreen() {
-    //     document.getElementById('btn-box').innerHTML = window.showGameOverScreenHTML();
-    //     document.getElementById('game-overlay').classList.add('game-over-overlay');
-    //     document.getElementById('game-overlay').innerHTML += window.showScoresBoxHTML(this.killedChickens, this.collectedCoins, this.calculateElapsedTime());
-    //     document.getElementById('status-txt').innerHTML = `Game Over`;
-    //     document.getElementById('movement-box').classList.add('d-none');
-    // }
+
+    showGameOverScreen() {
+        document.getElementById('btn-box').innerHTML = window.showGameOverScreenHTML();
+        document.getElementById('game-overlay').classList.add('game-over-overlay');
+        document.getElementById('game-overlay').innerHTML += window.showScoresBoxHTML(this.killedChickens, this.collectedCoins, this.calculateElapsedTime());
+        document.getElementById('status-txt').innerHTML = `Game Over`;
+        document.getElementById('movement-box').classList.add('d-none');
+    }
     
     
 
@@ -199,14 +206,19 @@ class World {
         document.getElementById('game-overlay').innerHTML += window.showScoresBoxHTML(this.killedChickens, this.collectedCoins, this.calculateElapsedTime());
     }
 
-    //LOOK AT THIS LINE this.newSubworld.showGameOverScreen()
+
     gameOver() {
         let gameOverInterval = setInterval(() => {
             if (this.character.isDead()) {
-                this.newSubworld.showGameOverScreen(this.killedChickens, this.collectedCoins, this.calculateElapsedTime())
-                clearInterval(gameOverInterval);
+                this.showGameOverScreen();
+                // clearInterval(gameOverInterval);
+                this.stopAllIntervals();
             }
         }, 200);
+    }
+
+    stopAllIntervals() {
+        for (let i = 1; i < 9999; i++) window.clearInterval(i)
     }
 
 
@@ -223,19 +235,25 @@ class World {
         this.addObjectsToMap(this.throwableObject);
         this.addToMap(this.character);
         this.ctx.translate(-this.camera_x, 0);
-        this.addToMap(this.statusBarHp);
-        this.addToMap(this.coinCount);
-        this.addToMap(this.chickenCounter);
-        this.addToMap(this.playTime);
-        this.addToMap(this.coolDownClock);
-        this.addToMap(this.statusBarBottle);
-        // this.newSubworld.drawPlayerCounts();
-        this.drawPlayerCounts();
+
+        if (!this.character.isDead()) {
+            let endboss = this.findEndboss();
+            if (endboss && endboss.energy > 0) {
+                this.addToMap(this.statusBarHp);
+                this.addToMap(this.coinCount);
+                this.addToMap(this.chickenCounter);
+                this.addToMap(this.playTime);
+                this.addToMap(this.coolDownClock);
+                this.addToMap(this.statusBarBottle);
+                this.drawPlayerCounts();
+            }
+        }
         let self = this
         requestAnimationFrame(function() {
             self.draw();
         });
     }
+
 
     drawPlayerCounts() {
         this.ctx.font = '18px Sancreek';
@@ -253,6 +271,19 @@ class World {
         elapsedTime = (elapsedTime / 1000).toFixed(0);
         return elapsedTime
     }
+
+
+    // drawPauseTiming() {
+    //     this.ctx.font = '18px Sancreek';
+    //     this.ctx.fillStyle = 'white';
+    //     this.ctx.fillText(this.calculateElapsedTime() + ' s', 60, 148);
+    // }
+
+    
+    // pauseTiming() {
+    //     let currentTime = new Date().getTime();
+    //     let elapsedTime = currentTime - this.startTime;
+    // }
 
 
     calculateThrowCoolDown() {

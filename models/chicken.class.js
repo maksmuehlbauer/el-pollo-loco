@@ -21,8 +21,9 @@ class Chicken extends MovableObject  {
         this.energy = 20;
         
         this.animate()
-
     }
+
+    
 
     animate() {
         setInterval( () => {
@@ -40,5 +41,4 @@ class Chicken extends MovableObject  {
             
         }, 250)
     }
-
 }
