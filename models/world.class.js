@@ -8,7 +8,6 @@ class World {
     coolDownClock = new CoolDownClock()
     newSubworld = new SubWorld();
     level = createLevel1();
-
     canvas;
     ctx;
     keyboard;
@@ -18,6 +17,9 @@ class World {
     killedChickens = 0;
     scores = [];
     
+
+    
+        
     
     // der Konstruktor wird ausgeführt sobald eine Instanz von der jeweiligen Klasse erstellt wird (in diese Fall der Klasse World)
     constructor(canvas, keyboard) {
@@ -32,6 +34,13 @@ class World {
         this.bottleCoolDown = 0;
     }
 
+    stopAllIntervals() {
+        for (let i = 1; i < 9999; i++) {
+            window.clearInterval(i)
+        } 
+    }
+
+    
     // Link so that you can access all variables in the World class with the Character class (Primary for keyboard Class)
     setWorld() {
         this.character.world = this
@@ -52,6 +61,7 @@ class World {
                 this.statusBarBottle.setPercentage(this.statusBarBottle.percentage -= 20);
                 let bottle = new ThrowableObject(this.character.x, this.character.y);
                 this.throwableObject.push(bottle);
+                
                 this.removeThrownBottleFromMap(bottle);
                 this.lastThrowTime = new Date().getTime()
             }
@@ -169,7 +179,9 @@ class World {
                 this.pushScores();
                 this.saveScores();
                 clearInterval(victoryInterval);
-                // this.stopAllIntervals();
+                setTimeout(() => {
+                    this.stopAllIntervals();
+                }, 3000);
             }
         }, 200);
     }
@@ -211,14 +223,12 @@ class World {
         let gameOverInterval = setInterval(() => {
             if (this.character.isDead()) {
                 this.showGameOverScreen();
-                // clearInterval(gameOverInterval);
-                this.stopAllIntervals();
+                clearInterval(gameOverInterval);
+                setTimeout(() => {
+                    this.stopAllIntervals();
+                }, 1500);
             }
         }, 200);
-    }
-
-    stopAllIntervals() {
-        for (let i = 1; i < 9999; i++) window.clearInterval(i)
     }
 
 
@@ -262,6 +272,14 @@ class World {
         this.ctx.fillText(this.killedChickens, 60, 112);
         this.ctx.fillText(this.calculateElapsedTime() + ' s', 60, 148);
         this.ctx.fillText(this.calculateThrowCoolDown() + ' s', 60, 180);
+
+
+        // if (this.bottleCoolDown === 0) {
+        //     console.log('reday')
+        //     this.ctx.fillText("Ready to throw", 60, 180); // Text, wenn der Cooldown abgelaufen ist
+        // } else {
+        //     this.ctx.fillText(throwCoolDown + ' s', 60, 180); // Aktuelle Cooldown-Zeit
+        // }
     }
 
 
@@ -271,19 +289,6 @@ class World {
         elapsedTime = (elapsedTime / 1000).toFixed(0);
         return elapsedTime
     }
-
-
-    // drawPauseTiming() {
-    //     this.ctx.font = '18px Sancreek';
-    //     this.ctx.fillStyle = 'white';
-    //     this.ctx.fillText(this.calculateElapsedTime() + ' s', 60, 148);
-    // }
-
-    
-    // pauseTiming() {
-    //     let currentTime = new Date().getTime();
-    //     let elapsedTime = currentTime - this.startTime;
-    // }
 
 
     calculateThrowCoolDown() {
@@ -348,3 +353,5 @@ class World {
         }
     }
 }
+
+

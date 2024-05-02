@@ -22,7 +22,7 @@ window.showScoresBoxHTML = function(chickens, coins, time) {
             <img src="img/3_enemies_chicken/chicken_normal/1_walk/1_w.png">
             <h2>${chickens}</h2>
         </div>
-        <div class="counter-box">
+        <div class="counter-box from-left-animation">
             <img src="img/8_coin/coin_1.png">
             <h2>${coins}</h2>
         </div>
@@ -66,7 +66,7 @@ function helpFaqHTML() {
         <p>5. Check your stats at the leaderboard</p>
 
         <h2>Game Mechanics:</h2>
-        <p>1. You can throw one bottle every 1.5/sek</p>
+        <p>1. You can throw one bottle every 1.5/sek (look at => <img class="rules-cd-img" src="img/10_interactions/sandclock.png">)</p>
         <p>2. You can hold 5 bottles max.</p>
         <p>3. Normal and small Chickens are one shot, Boss have more energy</p>
         <p>4. From time to time there spawn new enemys and bottles</p>
@@ -83,7 +83,7 @@ function showScoreBoardHTML() {
         </svg>
     </a>
     <div id="rules">
-        <h2>Scoreboard</h2>
+        <h2>Top 5 Scores</h2>
         <table id="score-table">
             <tr>
                 <th>Nr.</th>

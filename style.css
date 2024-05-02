@@ -144,6 +144,12 @@ h3 {
     align-items: center;
 }
 
+.rules-cd-img {
+    filter: invert();
+    width: 20px;
+    margin-bottom: -4px;
+}
+
 p {
     font-weight: 100;
     font-family: 'arial', 'Helvetica', 'sans-serif';
@@ -166,6 +172,34 @@ p {
     padding: 8px;
     border-radius: 999px;
     filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.4));
+    animation: slideInLeft 1s;
+}
+
+.from-left-animation {
+    animation: slideInRight 1s;
+}
+
+@keyframes slideInRight {
+    0% {
+        transform: translateX(125%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0%);
+        opacity: 1;
+    }
+}
+
+
+@keyframes slideInLeft {
+    0% {
+        transform: translateX(-125%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0%);
+        opacity: 1;
+    }
 }
 
 .counter-box img {
@@ -226,6 +260,21 @@ tbody {
     animation: fadeOutGreen 5s; /* Die Animation dauert 1 Sekunde */
 }
 
+#fullscreen {
+    position: absolute;
+    width: 25px;
+    bottom: 8px;
+    right: 8px;
+    filter: invert();
+    cursor: pointer;
+}
+
+
+#fullscreen:hover {
+    transform: scale(1.1);
+}
+
+
 @keyframes fadeOutGreen {
     0% {
         background-color: rgba(0, 0, 0, 0); /* Vollständig undurchsichtiges Rot */
@@ -236,7 +285,19 @@ tbody {
 }
 
 #status-txt {
+    letter-spacing: 4px;
     color: white;
+    animation: scaleBigger 1s;
+    text-transform: uppercase;
+}
+
+@keyframes scaleBigger {
+    0% {
+        transform: scale(0.1);
+    }
+    100% {
+        transform: scale(1);
+    }
 }
 
 .controls-desktop {
@@ -262,7 +323,7 @@ canvas {
 }
 
 
-@media only screen and (max-width: 720px) {
+@media only screen and (max-width: 1180px) {
     #canvas-box {
         width: 100%;
         height: auto
@@ -436,7 +497,7 @@ canvas {
     }
 }
 
-@media only screen and (max-height: 480px) {
+@media only screen and (max-height: 820px) {
     #canvas-box {
         height: 100vh;
     }

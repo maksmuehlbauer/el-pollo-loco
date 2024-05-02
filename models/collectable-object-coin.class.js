@@ -15,8 +15,6 @@ class CoinObject extends MovableObject {
         this.x = x;
         this.y = y;
         this.animate();
-
-
     }
 
     animate() {

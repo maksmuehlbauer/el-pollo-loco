@@ -44,6 +44,8 @@ class Endboss extends MovableObject {
         'img/4_enemie_boss_chicken/4_hurt/G21.png'
     ]
 
+    endbossDie_sound = new Audio('audio/victory.mp3')
+
 
     constructor() {
         super().loadImage('img/4_enemie_boss_chicken/2_alert/G5.png')
@@ -81,6 +83,7 @@ class Endboss extends MovableObject {
             }          
             if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DEAD)
+                this.endbossDie_sound.play();
                 this.speed = 0
             }
             if (this.isHit()) {

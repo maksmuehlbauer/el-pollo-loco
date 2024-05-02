@@ -3,7 +3,7 @@ class MovableObject extends DrawableObject {
     otherDirection = false;
     speedY = 0;
     acceleration = 2.5;
-    energy = 2000;
+    energy = 10000;
     lastHit = 0;
     throwSpeed = 20;
 
@@ -79,6 +79,11 @@ class MovableObject extends DrawableObject {
 
     jump() {
         return this.speedY = 30
+    }
+
+    
+    characterStartAnimation() {
+        return this.x === 0
     }
 }
 

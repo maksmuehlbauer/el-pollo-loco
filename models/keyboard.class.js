@@ -5,16 +5,19 @@ class Keyboard {
     UP = false;
     SPACE = false;
     THROW = false;
+    lastKeyboardAction;
+
 
 
     constructor() {
         this.desktopPressEvents();
         this.mobilePressEvents();
-        
+        this.lastKeyboardInput()
     }
 
 
     mobilePressEvents() {
+        
         document.getElementById('btn-left').addEventListener('touchstart', (e) => {
             e.preventDefault();
             this.LEFT = true;
@@ -23,6 +26,7 @@ class Keyboard {
         document.getElementById('btn-left').addEventListener('touchend', (e) => {
             e.preventDefault();
             this.LEFT = false;
+            this.lastKeyboardInput()
         });
 
         document.getElementById('btn-right').addEventListener('touchstart', (e) => {
@@ -33,6 +37,7 @@ class Keyboard {
         document.getElementById('btn-right').addEventListener('touchend', (e) => {
             e.preventDefault();
             this.RIGHT = false;
+            this.lastKeyboardInput()
         });
 
         document.getElementById('btn-throw').addEventListener('touchstart', (e) => {
@@ -43,6 +48,7 @@ class Keyboard {
         document.getElementById('btn-throw').addEventListener('touchend', (e) => {
             e.preventDefault();
             this.THROW = false;
+            this.lastKeyboardInput()
         });
 
         document.getElementById('btn-jump').addEventListener('touchstart', (e) => {
@@ -53,12 +59,15 @@ class Keyboard {
         document.getElementById('btn-jump').addEventListener('touchend', (e) => {
             e.preventDefault();
             this.SPACE = false;
+            this.lastKeyboardInput()
         });
         
     }
 
     desktopPressEvents() {
+        
         window.addEventListener("keydown", (event) => {
+            this.lastKeyboardInput()
             // console.log(event)
             if (event.keyCode === 39) {
                 keyboard.RIGHT = true;
@@ -112,6 +121,19 @@ class Keyboard {
         });
     }
 
+
+    calculateElapsedTime() {
+        let currentTime = new Date().getTime();
+        let elapsedTime = currentTime - this.lastKeyboardAction
+        elapsedTime = elapsedTime / 1000
+        return elapsedTime
+    }
+
+    
+    lastKeyboardInput() {
+        this.lastKeyboardAction = new Date().getTime();
+        return this.lastKeyboardAction
+    }
 }
 
 

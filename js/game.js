@@ -10,6 +10,7 @@ function init() {
     canvas = document.getElementById('canvas');
     startGame() 
     // showScoreBoard();
+    // helpFaq()
 }
 
 
@@ -71,6 +72,31 @@ function loadScores() {
     let ScoresAsText = localStorage.getItem("Scores");
     if (scores) {
         scores = JSON.parse(ScoresAsText);
+    }
+  }
+
+  function fullscreen() {
+    let fullscreen = document.getElementById('canvas');
+    enterFullscreen(fullscreen)
+  }
+
+
+  function enterFullscreen(element) {
+    if(element.requestFullscreen) {
+      element.requestFullscreen();
+    } else if(element.msRequestFullscreen) {      // for IE11 (remove June 15, 2022)
+      element.msRequestFullscreen();
+    } else if(element.webkitRequestFullscreen) {  // iOS Safari
+      element.webkitRequestFullscreen();
+    }
+  }
+
+
+  function exitFullscreen() {
+    if(document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if(document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
     }
   }
 
