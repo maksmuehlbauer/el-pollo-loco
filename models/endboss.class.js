@@ -1,4 +1,5 @@
 class Endboss extends MovableObject {
+    worldSounds = new WorldSounds()
     y = 125;
     width = 225;
     height = 350;
@@ -44,7 +45,7 @@ class Endboss extends MovableObject {
         'img/4_enemie_boss_chicken/4_hurt/G21.png'
     ]
 
-    endbossDie_sound = new Audio('audio/victory.mp3')
+
 
 
     constructor() {
@@ -55,7 +56,7 @@ class Endboss extends MovableObject {
         this.loadImages(this.IMAGES_DEAD)
         this.loadImages(this.IMAGES_HURT)
         this.x = 5100;
-        this.energy = 5;
+        this.energy = 10;
         this.speed = 10
         this.animate();
     }
@@ -66,6 +67,7 @@ class Endboss extends MovableObject {
             if (this.startBossFight()) {
                 this.playAnimation(this.IMAGES_WALK);
                 this.moveLeft();
+                this.worldSounds.playEndbossStartSound()
             } else if (this.x === 5100) {
                 this.playAnimation(this.IMAGES_ALERT);
             } else if (this.distanceCharToBoss() < 100) {
@@ -76,6 +78,7 @@ class Endboss extends MovableObject {
                 this.playAnimation(this.IMAGES_ATTACK);
                 this.moveLeft();
                 this.speed = 30
+                this.worldSounds.playEndbossStartSound()
             }  else {
                 this.playAnimation(this.IMAGES_WALK);
                 this.moveLeft();
@@ -83,11 +86,13 @@ class Endboss extends MovableObject {
             }          
             if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DEAD)
-                this.endbossDie_sound.play();
+                this.worldSounds.playEndbossDieSound();
                 this.speed = 0
             }
             if (this.isHit()) {
                 this.playAnimation(this.IMAGES_HURT)
+                this.worldSounds.pauseBackgroundSound();
+                this.worldSounds.playEndbossHitSound() 
             } 
         }, 125)
     }
@@ -110,5 +115,4 @@ class Endboss extends MovableObject {
         }, 100)
     }
 
-    
 }

@@ -6,9 +6,8 @@ class Keyboard {
     SPACE = false;
     THROW = false;
     lastKeyboardAction;
-
-
-
+    
+    
     constructor() {
         this.desktopPressEvents();
         this.mobilePressEvents();
@@ -17,7 +16,6 @@ class Keyboard {
 
 
     mobilePressEvents() {
-        
         document.getElementById('btn-left').addEventListener('touchstart', (e) => {
             e.preventDefault();
             this.LEFT = true;

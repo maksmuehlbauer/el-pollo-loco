@@ -1,4 +1,5 @@
 class World {
+    worldSounds = new WorldSounds();
     character = new Character();
     statusBarHp = new StatusBarHp();
     statusBarBottle = new StatusBarBottle();
@@ -8,6 +9,7 @@ class World {
     coolDownClock = new CoolDownClock()
     newSubworld = new SubWorld();
     level = createLevel1();
+    
     canvas;
     ctx;
     keyboard;
@@ -16,8 +18,6 @@ class World {
     collectedCoins = 0;
     killedChickens = 0;
     scores = [];
-    
-
     
         
     
@@ -33,6 +33,7 @@ class World {
         this.startTime = new Date().getTime();
         this.bottleCoolDown = 0;
     }
+
 
     stopAllIntervals() {
         for (let i = 1; i < 9999; i++) {
@@ -52,7 +53,7 @@ class World {
             this.checkThrowObjects();
             this.checkCollisions();
             this.removeThrownBottleFromMap();
-        }, 100)
+        }, 1000 / 60)
     }
 
 
@@ -61,7 +62,6 @@ class World {
                 this.statusBarBottle.setPercentage(this.statusBarBottle.percentage -= 20);
                 let bottle = new ThrowableObject(this.character.x, this.character.y);
                 this.throwableObject.push(bottle);
-                
                 this.removeThrownBottleFromMap(bottle);
                 this.lastThrowTime = new Date().getTime()
             }
@@ -151,6 +151,7 @@ class World {
                     this.statusBarBottle.setPercentage(this.statusBarBottle.percentage += 20)
                     let collectableObjectIndex = this.level.collectableBottles.indexOf(collectObject)
                     this.level.collectableBottles.splice(collectableObjectIndex, 1)
+                    this.worldSounds.playCollectBottleSound();
             }
         });
     }
@@ -161,6 +162,7 @@ class World {
             if (this.character.isColliding(collectObject)) {
                 this.collectedCoins++;
                 this.level.collectableCoins.splice(index, 1);
+                this.worldSounds.playCollectCoinSound();
             }
         });
     }
@@ -178,6 +180,7 @@ class World {
                 this.victoryScreen();
                 this.pushScores();
                 this.saveScores();
+                this.worldSounds.pauseBackgroundSound()
                 clearInterval(victoryInterval);
                 setTimeout(() => {
                     this.stopAllIntervals();
@@ -223,6 +226,7 @@ class World {
         let gameOverInterval = setInterval(() => {
             if (this.character.isDead()) {
                 this.showGameOverScreen();
+                this.worldSounds.pauseBackgroundSound()
                 clearInterval(gameOverInterval);
                 setTimeout(() => {
                     this.stopAllIntervals();

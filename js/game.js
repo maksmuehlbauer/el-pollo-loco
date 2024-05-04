@@ -2,13 +2,12 @@ let canvas;
 let world;
 let keyboard = new Keyboard();
 let scores = [];
-
 loadScores();
 
 
 function init() {
     canvas = document.getElementById('canvas');
-    startGame() 
+    // startGame() 
     // showScoreBoard();
     // helpFaq()
 }
@@ -30,6 +29,7 @@ function startGame() {
     document.getElementById('game-overlay').style.display = "none";
     world = new World(canvas, keyboard);
     world.draw();
+    world.worldSounds.playBackgroundSound();
     showControls();
 }
 
@@ -57,11 +57,11 @@ function showScoreBoard() {
 
 function sortScores() {
     scores.sort((a, b) => {
-        if (parseInt(a.time) !== parseInt(b.time)) {
-            return parseInt(a.time) - parseInt(b.time);
+        if (parseInt(a.coins) !== parseInt(b.coins)) {
+            return parseInt(b.coins) - parseInt(a.coins);
         };
-        if (a.coins !== b.coins) {
-            return b.coins - a.coins;
+        if (a.time !== b.time) {
+            return b.time - a.time;
         };
         return b.chickens - a.chickens;
     });

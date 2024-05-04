@@ -61,7 +61,7 @@ function helpFaqHTML() {
         <h2>Rules:</h2>
         <p>1. Defeat the final boss, to save your Scores</p>
         <p>2. Loosing dont save scores</p>
-        <p>3. measured values = Time > Coins > defeated Chickens</p>
+        <p>3. measured values = Coins > Time > defeated Chickens</p>
         <p>4. if your energy bar drops to zero, you lose.</p>
         <p>5. Check your stats at the leaderboard</p>
 
@@ -87,8 +87,8 @@ function showScoreBoardHTML() {
         <table id="score-table">
             <tr>
                 <th>Nr.</th>
-                <th><img src="img/10_interactions/time.png" class="img-time"></th>
                 <th><img src="img/8_coin/coin_1.png"></th>
+                <th><img src="img/10_interactions/time.png" class="img-time"></th>
                 <th><img src="img/3_enemies_chicken/chicken_normal/1_walk/1_w.png"></th>
             <tr>
         </table>
@@ -96,11 +96,12 @@ function showScoreBoardHTML() {
 `
 }
 
+
 function leaderboardTableHTML(i, score) {
     return /*html*/`
     <td>#${i + 1}</td>
+    <td>${score.coins} </td>
     <td>${score.time} s</td>
-    <td>${score.coins}</td>
     <td>${score.chickens}</td>
     `
 }

@@ -1,4 +1,5 @@
 class ChickenSmall extends MovableObject {
+
     y = 375;
     width = 55;
     height = 55;
@@ -11,8 +12,8 @@ class ChickenSmall extends MovableObject {
     IMAGES_DEAD = [
         'img/3_enemies_chicken/chicken_small/2_dead/dead.png'
     ]
-
     sound_chickenDead = new Audio('audio/chicken-dead.mp3');
+
 
     constructor() {
         super().loadImage('img/3_enemies_chicken/chicken_small/1_walk/1_w.png')
@@ -36,15 +37,16 @@ class ChickenSmall extends MovableObject {
             }
             if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DEAD);
-                this.playDieSound()
+                this.playChickenDieSound();
                 clearInterval(chickenSmallAnimation)
             }
             
         }, 250)
     }
 
-    playDieSound() {
-        this.sound_chickenDead.volume = 0.3;
+    playChickenDieSound() {
+        this.sound_chickenDead.volume = 0.1;
         this.sound_chickenDead.play();
     }
+
 }

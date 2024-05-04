@@ -1,5 +1,6 @@
 
 class ThrowableObject extends MovableObject {
+    worldSounds = new WorldSounds();
     IMAGES_BOTTLE_SPLASH = [
         'img/6_salsa_bottle/bottle_rotation/bottle_splash/1_bottle_splash.png',
         'img/6_salsa_bottle/bottle_rotation/bottle_splash/2_bottle_splash.png',
@@ -16,8 +17,8 @@ class ThrowableObject extends MovableObject {
         'img/6_salsa_bottle/bottle_rotation/4_bottle_rotation.png'
     ]
     
-    throw_sound = new Audio('audio/throw.mp3')
-    breakingBottle_sound = new Audio('audio/break-bottle.mp3')
+
+
 
     constructor(x, y) {
         super().loadImage('img/6_salsa_bottle/salsa_bottle.png')
@@ -26,17 +27,16 @@ class ThrowableObject extends MovableObject {
         this.animate();
         this.applyGravity();
         this.bottleFly();
-        this.playThrowSound();
+        this.worldSounds.playThrowSound()
         this.x = x;
         this.y = y;
         this.width = 70;
         this.height = 70;
         this.speedY = 20; 
         this.speedX = 15;
-        
     }
 
-    
+        
     animate() {
         let bottleAnimation = setInterval(() => {
             if (this.isInAir()) {
@@ -46,12 +46,10 @@ class ThrowableObject extends MovableObject {
                 this.speedX = 0;
                 this.acceleration = 0;
                 this.playAnimation(this.IMAGES_BOTTLE_SPLASH);
-                this.playBreakBottleSound()
+                this.worldSounds.playBreakBottleSound()
                 setTimeout(() => {
                     clearInterval(bottleAnimation)
                 }, 1000);
-                
-                
             }
         }, 65);
     }
@@ -69,15 +67,7 @@ class ThrowableObject extends MovableObject {
         }, 30);
     }
 
-    playThrowSound() {
-        this.throw_sound.volume = 0.5
-        this.throw_sound.play()
-    }
 
-    playBreakBottleSound(bottleAnimation) {
-        this.breakingBottle_sound.play();
-        
-    }
 
 
 
