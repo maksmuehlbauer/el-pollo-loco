@@ -5,13 +5,14 @@ class Keyboard {
     UP = false;
     SPACE = false;
     THROW = false;
-    lastKeyboardAction;
+    lastKeyboardAction = 6;
+
     
     
     constructor() {
         this.desktopPressEvents();
         this.mobilePressEvents();
-        this.lastKeyboardInput()
+        this.lastKeyboardAction = new Date().getTime();
     }
 
 

@@ -7,9 +7,7 @@ loadScores();
 
 function init() {
     canvas = document.getElementById('canvas');
-    // startGame() 
-    // showScoreBoard();
-    // helpFaq()
+    // startGame();
 }
 
 
@@ -27,10 +25,15 @@ function MainMenu() {
 
 function startGame() {
     document.getElementById('game-overlay').style.display = "none";
-    world = new World(canvas, keyboard);
-    world.draw();
-    world.worldSounds.playBackgroundSound();
+    initWorld();
     showControls();
+}
+
+
+function initWorld() {
+  world = new World(canvas, keyboard);
+  world.draw();
+  world.worldSounds.playBackgroundSound();
 }
 
 
@@ -61,7 +64,7 @@ function sortScores() {
             return parseInt(b.coins) - parseInt(a.coins);
         };
         if (a.time !== b.time) {
-            return b.time - a.time;
+            return a.time - b.time;
         };
         return b.chickens - a.chickens;
     });
@@ -75,28 +78,28 @@ function loadScores() {
     }
   }
 
-  function fullscreen() {
-    let fullscreen = document.getElementById('canvas');
-    enterFullscreen(fullscreen)
+function fullscreen() {
+  let fullscreen = document.getElementById('canvas');
+  enterFullscreen(fullscreen)
+}
+
+
+function enterFullscreen(element) {
+  if(element.requestFullscreen) {
+    element.requestFullscreen();
+  } else if(element.msRequestFullscreen) {      // for IE11 (remove June 15, 2022)
+    element.msRequestFullscreen();
+  } else if(element.webkitRequestFullscreen) {  // iOS Safari
+    element.webkitRequestFullscreen();
   }
+}
 
 
-  function enterFullscreen(element) {
-    if(element.requestFullscreen) {
-      element.requestFullscreen();
-    } else if(element.msRequestFullscreen) {      // for IE11 (remove June 15, 2022)
-      element.msRequestFullscreen();
-    } else if(element.webkitRequestFullscreen) {  // iOS Safari
-      element.webkitRequestFullscreen();
-    }
+function exitFullscreen() {
+  if(document.exitFullscreen) {
+    document.exitFullscreen();
+  } else if(document.webkitExitFullscreen) {
+    document.webkitExitFullscreen();
   }
-
-
-  function exitFullscreen() {
-    if(document.exitFullscreen) {
-      document.exitFullscreen();
-    } else if(document.webkitExitFullscreen) {
-      document.webkitExitFullscreen();
-    }
-  }
+}
 

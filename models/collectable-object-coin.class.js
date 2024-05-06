@@ -12,16 +12,15 @@ class CoinObject extends MovableObject {
         super()
         this.loadImage(imagepath);
         this.loadImages(this.IMAGES_ANIMATION);
+        this.animate();
         this.x = x;
         this.y = y;
-        this.animate();
     }
+
 
     animate() {
         setInterval(() => {
             this.playAnimation(this.IMAGES_ANIMATION)
         }, 500);
     }
-
-
 }

@@ -8,8 +8,6 @@ class CoolDownClock extends DrawableObject {
         super();
         this.loadImage('img/10_interactions/sandclock.png');
     }
-    
-
 }
 
 

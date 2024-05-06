@@ -1,7 +1,6 @@
 class BottleObject extends MovableObject {
     width = 100;
     height = 100;
-    
     IMAGES_ANIMATION = [
         'img/6_salsa_bottle/1_salsa_bottle_on_ground.png',
         'img/6_salsa_bottle/2_salsa_bottle_on_ground.png'
@@ -12,10 +11,9 @@ class BottleObject extends MovableObject {
         super()
         this.loadImage(imagePath);
         this.loadImages(this.IMAGES_ANIMATION);
+        this.animate();
         this.x = x + Math.random() * 200
         this.y = 350 + Math.random() * 25
-        this.animate();
-
     }
 
     animate() {
@@ -23,7 +21,4 @@ class BottleObject extends MovableObject {
             this.playAnimation(this.IMAGES_ANIMATION)
         }, 350);
     }
-
-
-
 }

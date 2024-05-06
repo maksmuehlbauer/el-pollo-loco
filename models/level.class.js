@@ -5,12 +5,13 @@ class Level {
     collectableBottles;
     collectableCoins;
     level_end_x = 5100;
-    numberOfEnemies = 20
-    numberOfBackgrounds = 7
-    numberOfBottles = 8
-    numberOfClouds = 10
+    numberOfEnemies = 14;
+    numberOfBackgrounds = 7;
+    numberOfBottles = 8;
+    numberOfClouds = 10;
+    numberOfCoins = 40;
     enemyTypes = [Chicken, ChickenSmall];
-    currentIndex = 0
+    currentIndex = 0;
 
 
     constructor(enemies, clouds, bgObjects, collectableBottles, collectableCoins) {
@@ -23,7 +24,8 @@ class Level {
         this.fillWorldWithBackground();
         this.fillWorldWithCollectableBottles();
         this.fillWorldWithClouds();
-        this.addNewObjectsToMap()
+        this.fillWorldWithCoins();
+        this.addNewObjectsToMap();
     }  
 
 
@@ -31,7 +33,18 @@ class Level {
         setInterval(() => {
             this.collectableBottles.push(new BottleObject('img/6_salsa_bottle/salsa_bottle.png', Math.random() * 4000))
             this.addAndChangeEnemyType();
-        }, 15000);            
+        }, 10000);            
+    }
+
+    getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+
+    fillWorldWithCoins() {
+        for (let i = 0; i < this.numberOfCoins; i++) {
+            this.collectableCoins.push(new CoinObject('img/8_coin/coin_1.png', this.getRandomInt(500, 4900), this.getRandomInt(50, 375)))
+        }
     }
     
 
@@ -74,7 +87,6 @@ class Level {
             this.collectableBottles.push(
                 new BottleObject('img/6_salsa_bottle/salsa_bottle.png', 400*i)
             )
-            
         }
     }
 }

@@ -20,10 +20,12 @@ class StatusBarCoin extends StatusBar {
         this.y = 40;
     }
 
+
     coinsvAvailable() {
         return this.percentage > this.emptyCoins
     }
 
+    
     coinsFull() {
         return this.percentage < this.fullCoins
     }

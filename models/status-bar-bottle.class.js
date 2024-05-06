@@ -20,10 +20,12 @@ class StatusBarBottle extends StatusBar {
         this.y = 0;
     }
 
+
     bottlesvAvailable() {
         return this.percentage > this.emptyBottles
     }
 
+    
     bottlesFull() {
         return this.percentage < this.fullBottles
     }

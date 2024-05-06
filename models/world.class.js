@@ -7,9 +7,7 @@ class World {
     chickenCounter = new ChickenCounter();
     playTime = new TimeMeasurement();
     coolDownClock = new CoolDownClock()
-    newSubworld = new SubWorld();
-    level = createLevel1();
-    
+    level = createLevel();
     canvas;
     ctx;
     keyboard;
@@ -53,7 +51,7 @@ class World {
             this.checkThrowObjects();
             this.checkCollisions();
             this.removeThrownBottleFromMap();
-        }, 1000 / 60)
+        }, 1000 / 30) 
     }
 
 
@@ -89,29 +87,12 @@ class World {
     collisionEnemies() {
         this.level.enemies.forEach((enemy) => {
             if (this.character.isColliding(enemy)) {
-                this.character.hit(5)
+                this.character.hit(2)
                 this.statusBarHp.setPercentage(this.character.energy)
             }
         });
     }
 
-
-    // collisionBottleWithEnemies() {
-    //     this.level.enemies.forEach((enemy) => {
-    //         this.throwableObject.forEach((bottle) => {
-    //             if (bottle.isColliding(enemy)) {
-    //                 let enemyIndex = this.level.enemies.indexOf(enemy)
-    //                 this.level.enemies[enemyIndex].hit(20)
-    //                 if (this.enemyDies(enemyIndex)) {
-    //                     this.level.enemies[enemyIndex].speed = 0;
-    //                     this.removeDeadObjectFromWorld(enemyIndex);
-                        
-    //                     // this.killedChickens += 1
-    //                 }
-    //             }
-    //         });
-    //     });
-    // }
 
     collisionBottleWithEnemies() {
         this.level.enemies.forEach((enemy, enemyIndex) => {
@@ -122,7 +103,6 @@ class World {
                         this.level.enemies[enemyIndex].speed = 0;
                         this.removeDeadObjectFromWorld(enemyIndex);
                         this.killedChickens += 1
-                        
                     }
                     this.throwableObject.splice(bottleIndex, 1);
                 }
@@ -132,7 +112,6 @@ class World {
 
 
     removeDeadObjectFromWorld(enemyIndex) {
-        // let endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
         if (this.findEndboss() !== undefined && this.level.enemies[enemyIndex] === this.findEndboss()) {
             setTimeout(() => {
                 this.level.enemies.splice(enemyIndex, 1);
@@ -142,6 +121,11 @@ class World {
                 this.level.enemies.splice(enemyIndex, 1);
             }, 1000);
         }
+    }
+
+
+    enemyDies(enemyIndex) {
+        return this.level.enemies[enemyIndex].energy <= 0
     }
     
         
@@ -168,11 +152,6 @@ class World {
     }
 
 
-    enemyDies(enemyIndex) {
-        return this.level.enemies[enemyIndex].energy <= 0
-    }
-
-
     victory() {
         let endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
         let victoryInterval = setInterval(() => {
@@ -187,6 +166,13 @@ class World {
                 }, 3000);
             }
         }, 200);
+    }
+
+
+    victoryScreen() {
+        document.getElementById('btn-box').innerHTML = window.victoryScreenHTML();
+        document.getElementById('game-overlay').classList.add('victory-overlay');
+        document.getElementById('game-overlay').innerHTML += window.showScoresBoxHTML(this.killedChickens, this.collectedCoins, this.calculateElapsedTime());
     }
 
     
@@ -213,13 +199,6 @@ class World {
         document.getElementById('movement-box').classList.add('d-none');
     }
     
-    
-
-    victoryScreen() {
-        document.getElementById('btn-box').innerHTML = window.victoryScreenHTML();
-        document.getElementById('game-overlay').classList.add('victory-overlay');
-        document.getElementById('game-overlay').innerHTML += window.showScoresBoxHTML(this.killedChickens, this.collectedCoins, this.calculateElapsedTime());
-    }
 
 
     gameOver() {
@@ -237,9 +216,23 @@ class World {
 
 
     draw() {
-        // Clear Canvas per Frame
         this.ctx.clearRect(0,0, this.canvas.width, this.canvas.height);
         this.ctx.translate(this.camera_x, 0);
+        this.drawMap()
+        this.ctx.translate(-this.camera_x, 0);
+        this.drawHud();
+        this.drawAnimationFrame() 
+    }
+
+
+    drawAnimationFrame() {
+        let self = this
+        requestAnimationFrame(function() {
+            self.draw();
+        });
+    }
+
+    drawMap() {
         this.addObjectsToMap(this.level.bgObjects);
         this.addObjectsToMap(this.level.collectableBottles);
         this.addObjectsToMap(this.level.clouds);
@@ -248,8 +241,9 @@ class World {
         this.addObjectsToMap(this.level.collectableCoins);
         this.addObjectsToMap(this.throwableObject);
         this.addToMap(this.character);
-        this.ctx.translate(-this.camera_x, 0);
+    }
 
+    drawHud() {
         if (!this.character.isDead()) {
             let endboss = this.findEndboss();
             if (endboss && endboss.energy > 0) {
@@ -262,10 +256,6 @@ class World {
                 this.drawPlayerCounts();
             }
         }
-        let self = this
-        requestAnimationFrame(function() {
-            self.draw();
-        });
     }
 
 
@@ -276,14 +266,6 @@ class World {
         this.ctx.fillText(this.killedChickens, 60, 112);
         this.ctx.fillText(this.calculateElapsedTime() + ' s', 60, 148);
         this.ctx.fillText(this.calculateThrowCoolDown() + ' s', 60, 180);
-
-
-        // if (this.bottleCoolDown === 0) {
-        //     console.log('reday')
-        //     this.ctx.fillText("Ready to throw", 60, 180); // Text, wenn der Cooldown abgelaufen ist
-        // } else {
-        //     this.ctx.fillText(throwCoolDown + ' s', 60, 180); // Aktuelle Cooldown-Zeit
-        // }
     }
 
 

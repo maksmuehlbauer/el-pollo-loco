@@ -19,18 +19,26 @@ class ChickenSmall extends MovableObject {
         super().loadImage('img/3_enemies_chicken/chicken_small/1_walk/1_w.png')
         this.loadImages(this.IMAGES_WALKING)
         this.loadImages(this.IMAGES_DEAD)
+        this.animate()
         this.x = 700 + Math.random() * 4700;
         this.speed = 0.1 + Math.random() * 0.20
         this.energy = 20;
-        this.animate()
     }
 
     animate() {
+        this.moveLeftState();
+        this.chickenStateAnimations();
+    }
+
+
+    moveLeftState() {
         setInterval( () => {
             this.moveLeft()
         }, 1000 / 60)
+    }
 
 
+    chickenStateAnimations() {
         let chickenSmallAnimation = setInterval(() => {
             if (this.moveLeft) {
                 this.playAnimation(this.IMAGES_WALKING)
@@ -40,9 +48,9 @@ class ChickenSmall extends MovableObject {
                 this.playChickenDieSound();
                 clearInterval(chickenSmallAnimation)
             }
-            
         }, 250)
     }
+
 
     playChickenDieSound() {
         this.sound_chickenDead.volume = 0.1;

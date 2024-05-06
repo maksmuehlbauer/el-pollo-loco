@@ -8,8 +8,6 @@ class TimeMeasurement extends DrawableObject {
         super();
         this.loadImage('img/10_interactions/time.png');
     }
-    
-
 }
 
 

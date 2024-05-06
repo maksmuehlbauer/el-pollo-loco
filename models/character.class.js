@@ -4,7 +4,7 @@ class Character extends MovableObject{
     width = 150;
     height = 300
     speed = 10;
-    lastCharacterAction;
+    fallCD = 0
     shortIdleCD = 6;
     longIdleCD = 10;
     IMAGES_WALKING = [
@@ -65,7 +65,7 @@ class Character extends MovableObject{
         'img/2_character_pepe/1_idle/long_idle/I-20.png'
     ]
     world;     // Link so that you can access all variables in the World class with the Character class (Primary for keyboard Class)
-    
+ 
 
     constructor() {
         super().loadImage('img/2_character_pepe/2_walk/W-21.png');
@@ -80,20 +80,23 @@ class Character extends MovableObject{
     }
 
     animate() {
-        
+        this.characterMovementAnimations();
+        this.characterStateAnimations();
+    }
+
+
+    characterMovementAnimations() {
         setInterval(() => {
             this.world.worldSounds.pauseCharacterWalkSound();
             if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
                 this.moveRight();
                 this.otherDirection = false;
                 this.world.worldSounds.playCharacterWalkSound();
-                
             }
             if (this.world.keyboard.LEFT && this.x > 0) {
                 this.moveLeft();
                 this.otherDirection = true;
                 this.world.worldSounds.playCharacterWalkSound();
-                
             }
             if (this.world.keyboard.SPACE && !this.isAboveGround()) {
                 this.jump();
@@ -102,13 +105,15 @@ class Character extends MovableObject{
             this.world.camera_x = -this.x + 100;
             
         }, 1000 / 60)
-        
+    }
 
+
+    characterStateAnimations() {
         let characterAnimation = setInterval(() => {
             this.world.worldSounds.pauseCharacterSleepingSound();
-            if (this.characterStartAnimation()) {
-                this.loadImage('img/2_character_pepe/3_jump/J-32.png')
-            } else if (this.isDead()) {
+            if (this.normaleState()) {
+                this.loadImage('img/2_character_pepe/2_walk/W-21.png')
+            if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DEAD)
                 this.world.worldSounds.playGameOverSound();
                 clearInterval(characterAnimation)
@@ -118,16 +123,22 @@ class Character extends MovableObject{
             } else if (this.isAboveGround()) {
                 this.playAnimation(this.IMAGES_JUMPING)
             } else {
-                if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
-                    this.playAnimation(this.IMAGES_WALKING)
-                } else if (this.longAFK()) {
+             } if (this.longAFK()) {
                     this.playAnimation(this.IMAGES_IDLE_LONG)
                     this.world.worldSounds.playCharacterSleepingSound();
                 } else if (this.shortAFK()) {
                     this.playAnimation(this.IMAGES_IDLE_SHORT)
+                } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+                        this.playAnimation(this.IMAGES_WALKING)
+                } else if (this.world.keyboard.THROW) {
+                    this.loadImage('img/2_character_pepe/2_walk/W-21.png')
                 }
             }
         }, 100)
+    }
+
+    normaleState() {
+        return this.world.keyboard.calculateElapsedTime() > this.fallCD
     }
 
     shortAFK() {
@@ -137,4 +148,9 @@ class Character extends MovableObject{
     longAFK() {
         return this.world.keyboard.calculateElapsedTime() > this.longIdleCD
     }
+
+    
+
 }
+
+

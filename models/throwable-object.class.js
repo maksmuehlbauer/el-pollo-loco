@@ -18,8 +18,6 @@ class ThrowableObject extends MovableObject {
     ]
     
 
-
-
     constructor(x, y) {
         super().loadImage('img/6_salsa_bottle/salsa_bottle.png')
         this.loadImages(this.IMAGES_BOTTLE_SPLASH);
@@ -42,7 +40,7 @@ class ThrowableObject extends MovableObject {
             if (this.isInAir()) {
                 this.playAnimation(this.IMAGES_BOTTLE_THROW);
             } else {
-                this.speedY = 0; // Stoppe die vertikale Bewegung
+                this.speedY = 0;
                 this.speedX = 0;
                 this.acceleration = 0;
                 this.playAnimation(this.IMAGES_BOTTLE_SPLASH);
@@ -54,6 +52,7 @@ class ThrowableObject extends MovableObject {
         }, 65);
     }
 
+    
     isInAir() {
         return this.y < 370;
     }

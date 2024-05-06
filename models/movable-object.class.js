@@ -3,7 +3,7 @@ class MovableObject extends DrawableObject {
     otherDirection = false;
     speedY = 0;
     acceleration = 2.5;
-    energy = 10000;
+    energy = 100;
     lastHit = 0;
     throwSpeed = 20;
 
@@ -29,7 +29,6 @@ class MovableObject extends DrawableObject {
 
     hit(damge) {
         this.energy -= damge;
-        // console.log(this.energy)
         if (this.energy <= 0) {
             this.energy = 0
         } else {
