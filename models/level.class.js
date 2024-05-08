@@ -25,16 +25,16 @@ class Level {
         this.fillWorldWithCollectableBottles();
         this.fillWorldWithClouds();
         this.fillWorldWithCoins();
-        this.addNewObjectsToMap();
+        // this.addNewObjectsToMap();
     }  
 
 
-    addNewObjectsToMap() {
-        setInterval(() => {
-            this.collectableBottles.push(new BottleObject('img/6_salsa_bottle/salsa_bottle.png', Math.random() * 4000))
-            this.addAndChangeEnemyType();
-        }, 10000);            
-    }
+    // addNewObjectsToMap() {
+    //     setInterval(() => {
+    //         this.collectableBottles.push(new BottleObject('img/6_salsa_bottle/salsa_bottle.png', Math.random() * 4000))
+    //         this.addAndChangeEnemyType();
+    //     }, 10000);            
+    // }
 
     getRandomInt(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;

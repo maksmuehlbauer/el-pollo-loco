@@ -1,6 +1,7 @@
 let canvas;
 let world;
 let keyboard = new Keyboard();
+let worldSounds = new WorldSounds();
 let scores = [];
 loadScores();
 
@@ -31,7 +32,7 @@ function startGame() {
 
 
 function initWorld() {
-  world = new World(canvas, keyboard);
+  world = new World(canvas, keyboard, worldSounds);
   world.draw();
   world.worldSounds.playBackgroundSound();
 }

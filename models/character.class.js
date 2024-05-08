@@ -1,12 +1,17 @@
 class Character extends MovableObject{
     x = 0;
-    y = 0
+    y = 0;
     width = 150;
     height = 300
     speed = 10;
-    fallCD = 0
-    shortIdleCD = 6;
-    longIdleCD = 10;
+    shortIdleCD = 0;
+    longIdleCD = 5;
+    offset = {
+        left: 20,
+        right: 15,
+        bottom: 15,
+        top: 110,
+      }
     IMAGES_WALKING = [
         'img/2_character_pepe/2_walk/W-21.png',
         'img/2_character_pepe/2_walk/W-22.png',
@@ -103,7 +108,6 @@ class Character extends MovableObject{
                 this.world.worldSounds.playCharacterJumpSound();
             }
             this.world.camera_x = -this.x + 100;
-            
         }, 1000 / 60)
     }
 
@@ -111,8 +115,7 @@ class Character extends MovableObject{
     characterStateAnimations() {
         let characterAnimation = setInterval(() => {
             this.world.worldSounds.pauseCharacterSleepingSound();
-            if (this.normaleState()) {
-                this.loadImage('img/2_character_pepe/2_walk/W-21.png')
+
             if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DEAD)
                 this.world.worldSounds.playGameOverSound();
@@ -120,26 +123,19 @@ class Character extends MovableObject{
             } else if (this.isHit()){
                 this.playAnimation(this.IMAGES_HURT)
                 this.world.worldSounds.playCharacterHurtSound()
+            } else if (this.longAFK()) {
+                this.playAnimation(this.IMAGES_IDLE_LONG)
+                this.world.worldSounds.playCharacterSleepingSound();
+            } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+                this.playAnimation(this.IMAGES_WALKING)
             } else if (this.isAboveGround()) {
                 this.playAnimation(this.IMAGES_JUMPING)
-            } else {
-             } if (this.longAFK()) {
-                    this.playAnimation(this.IMAGES_IDLE_LONG)
-                    this.world.worldSounds.playCharacterSleepingSound();
-                } else if (this.shortAFK()) {
-                    this.playAnimation(this.IMAGES_IDLE_SHORT)
-                } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
-                        this.playAnimation(this.IMAGES_WALKING)
-                } else if (this.world.keyboard.THROW) {
-                    this.loadImage('img/2_character_pepe/2_walk/W-21.png')
-                }
-            }
-        }, 100)
+            } else if (this.shortAFK()) {
+                this.playAnimation(this.IMAGES_IDLE_SHORT)
+            }                 
+            }, 125 )
     }
 
-    normaleState() {
-        return this.world.keyboard.calculateElapsedTime() > this.fallCD
-    }
 
     shortAFK() {
         return this.world.keyboard.calculateElapsedTime() > this.shortIdleCD

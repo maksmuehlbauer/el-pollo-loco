@@ -37,11 +37,12 @@ class ThrowableObject extends MovableObject {
         
     animate() {
         let bottleAnimation = setInterval(() => {
-            if (this.isInAir()) {
+            if (this.isFlying() && this.isInAir()) {
                 this.playAnimation(this.IMAGES_BOTTLE_THROW);
-            } else {
+            }  
+            else {
                 this.speedY = 0;
-                this.speedX = 0;
+                // this.speedX = 0;
                 this.acceleration = 0;
                 this.playAnimation(this.IMAGES_BOTTLE_SPLASH);
                 this.worldSounds.playBreakBottleSound()
@@ -52,10 +53,16 @@ class ThrowableObject extends MovableObject {
         }, 65);
     }
 
-    
+
     isInAir() {
         return this.y < 370;
     }
+
+
+    isFlying() {
+        return this.speedX > 0
+    }
+
 
 
     bottleFly() {
@@ -65,6 +72,45 @@ class ThrowableObject extends MovableObject {
             }
         }, 30);
     }
+
+
+
+
+
+    // playSplashAnimation() {
+    //     this.speedY = 0;
+    //     this.speedX = 0;
+    //     this.acceleration = 0;
+    //     this.playAnimation(this.IMAGES_BOTTLE_SPLASH);
+    //     this.worldSounds.playBreakBottleSound();
+    // }
+
+
+
+    // animate() {
+    //     let bottleAnimation = setInterval(() => {
+    //         if (this.isInAir()) {
+    //             this.playAnimation(this.IMAGES_BOTTLE_THROW);
+    //         } else {
+    //             this.speedY = 0;
+    //             this.speedX = 0;
+    //             this.acceleration = 0;
+    //             this.playAnimation(this.IMAGES_BOTTLE_SPLASH);
+    //             this.worldSounds.playBreakBottleSound()
+    //             setTimeout(() => {
+    //                 clearInterval(bottleAnimation)
+    //             }, 1000);
+    //         }
+    //     }, 65);
+    // }
+
+
+
+    
+
+
+
+
 
 
 

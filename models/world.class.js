@@ -1,5 +1,4 @@
 class World {
-    worldSounds = new WorldSounds();
     character = new Character();
     statusBarHp = new StatusBarHp();
     statusBarBottle = new StatusBarBottle();
@@ -20,16 +19,20 @@ class World {
         
     
     // der Konstruktor wird ausgeführt sobald eine Instanz von der jeweiligen Klasse erstellt wird (in diese Fall der Klasse World)
-    constructor(canvas, keyboard) {
+    constructor(canvas, keyboard, worldSounds) {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
+        this.worldSounds = worldSounds;
         this.setWorld();
         this.run();
         this.gameOver();
         this.victory();
         this.startTime = new Date().getTime();
         this.bottleCoolDown = 0;
+
+
+        this.enemyDiesExecuted = [];
     }
 
 
@@ -51,12 +54,13 @@ class World {
             this.checkThrowObjects();
             this.checkCollisions();
             this.removeThrownBottleFromMap();
-        }, 1000 / 30) 
+        }, 1000 / 60) 
     }
 
 
     checkThrowObjects() {
-        if (this.keyboard.THROW && this.throwableObject.length === this.bottleCoolDown && this.statusBarBottle.bottlesvAvailable()) {
+        if (this.keyboard.THROW && this.throwableObject.length <= this.bottleCoolDown && this.statusBarBottle.bottlesvAvailable()) {
+                console.log(this.throwableObject.length)
                 this.statusBarBottle.setPercentage(this.statusBarBottle.percentage -= 20);
                 let bottle = new ThrowableObject(this.character.x, this.character.y);
                 this.throwableObject.push(bottle);
@@ -98,19 +102,38 @@ class World {
         this.level.enemies.forEach((enemy, enemyIndex) => {
             this.throwableObject.forEach((bottle, bottleIndex) => {
                 if (bottle.isColliding(enemy)) {
+              
                     enemy.hit(20);
-                    if (this.enemyDies(enemyIndex)) {
+                    bottle.speedX = 0;
+                    if (!this.enemyDiesExecuted[enemyIndex] && this.enemyDies(enemyIndex)) {
                         this.level.enemies[enemyIndex].speed = 0;
                         this.removeDeadObjectFromWorld(enemyIndex);
                         this.killedChickens += 1
+                        this.enemyDiesExecuted[enemyIndex] = true;
+
                     }
-                    this.throwableObject.splice(bottleIndex, 1);
+                    // this.throwableObject.splice(bottleIndex, 1);
+                    
                 }
             });
         });
     }
 
 
+
+    enemyDies(enemyIndex) {
+        return this.level.enemies[enemyIndex].energy <= 0
+    }
+
+
+
+
+
+    bottleInArray() {
+        return this.throwableObject.length > 0
+    }
+
+    
     removeDeadObjectFromWorld(enemyIndex) {
         if (this.findEndboss() !== undefined && this.level.enemies[enemyIndex] === this.findEndboss()) {
             setTimeout(() => {
@@ -124,9 +147,7 @@ class World {
     }
 
 
-    enemyDies(enemyIndex) {
-        return this.level.enemies[enemyIndex].energy <= 0
-    }
+
     
         
     collisionBottleObject() {
@@ -153,9 +174,8 @@ class World {
 
 
     victory() {
-        let endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
         let victoryInterval = setInterval(() => {
-            if (endboss.isDead()) {
+            if (this.findEndboss().isDead()) {
                 this.victoryScreen();
                 this.pushScores();
                 this.saveScores();
@@ -243,6 +263,7 @@ class World {
         this.addToMap(this.character);
     }
 
+
     drawHud() {
         if (!this.character.isDead()) {
             let endboss = this.findEndboss();
@@ -299,7 +320,7 @@ class World {
             this.flipImage(mo)
         }
         mo.draw(this.ctx)
-        // mo.drawFrame(this.ctx)
+        mo.drawFrame(this.ctx)
         if (mo.otherDirection) {
             this.flipImageBack(mo)
         }

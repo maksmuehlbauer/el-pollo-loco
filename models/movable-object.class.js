@@ -3,9 +3,15 @@ class MovableObject extends DrawableObject {
     otherDirection = false;
     speedY = 0;
     acceleration = 2.5;
-    energy = 100;
+    energy = 100000;
     lastHit = 0;
     throwSpeed = 20;
+    offset = {
+        left: 0,
+        right: 0,
+        bottom: 0,
+        top: 0,
+      }
 
 
     applyGravity() {
@@ -49,14 +55,6 @@ class MovableObject extends DrawableObject {
         
     }
 
-
-    isColliding(mo) {
-        return this.x + this.width > mo.x &&
-            this.y + this.height > mo.y &&
-            this.x < mo.x &&
-            this.y < mo.y + mo.height;
-    }
-
         
     moveLeft() {
         this.x -= this.speed;
@@ -84,9 +82,29 @@ class MovableObject extends DrawableObject {
     characterStartAnimation() {
         return this.x === 0
     }
+
+
+    isColliding(mo) {
+        return (
+          this.x + this.width - this.offset.right > mo.x + mo.offset.left &&
+          this.y + this.height - this.offset.bottom > mo.y + mo.offset.top &&
+          this.x + this.offset.left < mo.x + mo.width - mo.offset.right &&
+          this.y + this.offset.top < mo.y + mo.height - mo.offset.bottom
+        );
+      }
+
 }
 
 
+// Junus alt
+    // isColliding(mo) {
+    //     return this.x + this.width > mo.x &&
+    //         this.y + this.height > mo.y &&
+    //         this.x < mo.x &&
+    //         this.y < mo.y + mo.height;
+    // }
+
+    // Junus nue
     // Bessere Formel zur Kollisionsberechnung (Genauer)
     // isColliding (obj) {
     //     return  (this.X + this.width) >= obj.X && this.X <= (obj.X + obj.width) && 
@@ -95,3 +113,5 @@ class MovableObject extends DrawableObject {
     //             obj.onCollisionCourse; // Optional: hiermit könnten wir schauen, ob ein Objekt sich in die richtige Richtung bewegt. Nur dann kollidieren wir. Nützlich bei Gegenständen, auf denen man stehen kann.
 
     // }
+
+

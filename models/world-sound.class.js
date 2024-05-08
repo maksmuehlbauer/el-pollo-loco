@@ -102,21 +102,4 @@ class WorldSounds {
         this.endbossDie_sound.volume = 0.5
         this.endbossDie_sound.play();
     }
-
-
-    muteAllSounds() {
-        this.collectCoin_sound.muted = true
-        this.collectBottle_sound.muted = true
-        this.background_music.muted = true
-        this.hurt_sound.muted = true
-        this.sleeping_sound.muted = true
-        this.gameOver_sound.muted = true
-        this.jumping_sound.muted = true
-        this.walking_sound.muted = true 
-        this.breakingBottle_sound.muted = true
-        this.throw_sound.muted = true
-        this.endbossDie_sound.muted = true
-        this.endbossHurt_sound.muted = true
-        this.endbossStart_sound.muted = true
-        }
 }
