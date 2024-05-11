@@ -18,45 +18,45 @@ class Keyboard {
 
     mobilePressEvents() {
         document.getElementById('btn-left').addEventListener('touchstart', (e) => {
-            e.preventDefault();
+            if (e.cancelable) e.preventDefault();
             this.LEFT = true;
         });
 
         document.getElementById('btn-left').addEventListener('touchend', (e) => {
-            e.preventDefault();
+            if (e.cancelable) e.preventDefault();
             this.LEFT = false;
             this.lastKeyboardInput()
         });
 
         document.getElementById('btn-right').addEventListener('touchstart', (e) => {
-            e.preventDefault();
+            if (e.cancelable) e.preventDefault();
             this.RIGHT = true;
         });
 
         document.getElementById('btn-right').addEventListener('touchend', (e) => {
-            e.preventDefault();
+            if (e.cancelable) e.preventDefault();
             this.RIGHT = false;
             this.lastKeyboardInput()
         });
 
         document.getElementById('btn-throw').addEventListener('touchstart', (e) => {
-            e.preventDefault();
+            if (e.cancelable) e.preventDefault();
             this.THROW = true;
         });
 
         document.getElementById('btn-throw').addEventListener('touchend', (e) => {
-            e.preventDefault();
+            if (e.cancelable) e.preventDefault();
             this.THROW = false;
             this.lastKeyboardInput()
         });
 
         document.getElementById('btn-jump').addEventListener('touchstart', (e) => {
-            e.preventDefault();
+            if (e.cancelable) e.preventDefault();
             this.SPACE = true;
         });
 
         document.getElementById('btn-jump').addEventListener('touchend', (e) => {
-            e.preventDefault();
+            if (e.cancelable) e.preventDefault();
             this.SPACE = false;
             this.lastKeyboardInput()
         });

@@ -15,7 +15,7 @@ class World {
     collectedCoins = 0;
     killedChickens = 0;
     scores = [];
-    
+   
         
     
     // der Konstruktor wird ausgeführt sobald eine Instanz von der jeweiligen Klasse erstellt wird (in diese Fall der Klasse World)
@@ -28,11 +28,11 @@ class World {
         this.run();
         this.gameOver();
         this.victory();
+        this.checkCollisions();
         this.startTime = new Date().getTime();
         this.bottleCoolDown = 0;
 
-
-        this.enemyDiesExecuted = [];
+        // this.enemyDiesExecuted = [];
     }
 
 
@@ -52,7 +52,6 @@ class World {
     run() {
         setInterval(() => {
             this.checkThrowObjects();
-            this.checkCollisions();
             this.removeThrownBottleFromMap();
         }, 1000 / 60) 
     }
@@ -81,10 +80,12 @@ class World {
 
 
     checkCollisions() {
-        this.collisionEnemies();
-        this.collisionBottleObject();
-        this.collisionCoinObject();
-        this.collisionBottleWithEnemies();
+        setInterval(() => {
+            this.collisionEnemies();
+            this.collisionBottleObject();
+            this.collisionCoinObject();
+            this.collisionBottleWithEnemies();
+        }, 1000 / 30);
     }
 
 
@@ -96,29 +97,41 @@ class World {
             }
         });
     }
+    
 
 
     collisionBottleWithEnemies() {
         this.level.enemies.forEach((enemy, enemyIndex) => {
             this.throwableObject.forEach((bottle, bottleIndex) => {
                 if (bottle.isColliding(enemy)) {
-              
-                    enemy.hit(20);
+     
+                    enemy.hit(2);
                     bottle.speedX = 0;
-                    if (!this.enemyDiesExecuted[enemyIndex] && this.enemyDies(enemyIndex)) {
-                        this.level.enemies[enemyIndex].speed = 0;
-                        this.removeDeadObjectFromWorld(enemyIndex);
-                        this.killedChickens += 1
-                        this.enemyDiesExecuted[enemyIndex] = true;
-
+                    if (this.enemyDies(enemyIndex)) {
+                        enemy.speed = 0;
+                        enemy.isKilled = true
+                        this.removeDeadObjectFromWorld(enemyIndex)
+                       
                     }
-                    // this.throwableObject.splice(bottleIndex, 1);
-                    
                 }
             });
         });
     }
 
+
+
+
+    removeDeadObjectFromWorld(enemyIndex) {
+        if (this.findEndboss() !== undefined && this.level.enemies[enemyIndex] === this.findEndboss()) {
+            setTimeout(() => {
+                this.level.enemies = this.level.enemies.filter(enemy => !enemy.isKilled);
+            }, 3000);
+        } else {
+            setTimeout(() => {
+                this.level.enemies = this.level.enemies.filter(enemy => !enemy.isKilled);
+            }, 1000);
+        }
+    }
 
 
     enemyDies(enemyIndex) {
@@ -134,17 +147,7 @@ class World {
     }
 
     
-    removeDeadObjectFromWorld(enemyIndex) {
-        if (this.findEndboss() !== undefined && this.level.enemies[enemyIndex] === this.findEndboss()) {
-            setTimeout(() => {
-                this.level.enemies.splice(enemyIndex, 1);
-            }, 3000);
-        } else {
-            setTimeout(() => {
-                this.level.enemies.splice(enemyIndex, 1);
-            }, 1000);
-        }
-    }
+
 
 
 
