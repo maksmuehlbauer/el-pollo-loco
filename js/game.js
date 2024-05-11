@@ -88,9 +88,9 @@ function fullscreen() {
 function enterFullscreen(element) {
   if(element.requestFullscreen) {
     element.requestFullscreen();
-  } else if(element.msRequestFullscreen) {      // for IE11 (remove June 15, 2022)
+  } else if(element.msRequestFullscreen) {  
     element.msRequestFullscreen();
-  } else if(element.webkitRequestFullscreen) {  // iOS Safari
+  } else if(element.webkitRequestFullscreen) {  
     element.webkitRequestFullscreen();
   }
 }
@@ -104,3 +104,31 @@ function exitFullscreen() {
   }
 }
 
+
+// Funktion, um zu prüfen, ob das Gerät ein Mobilgerät ist
+function isMobileDevice() {
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
+
+
+function output() {
+  if (isMobileDevice()) {
+      console.log("Die Seite wird auf einem Mobilgerät geöffnet.");
+      
+      function updateOrientation() {
+          if (window.orientation === 0) {
+            // enterFullscreen(fullscreen)
+            document.getElementById('mobile-info').classList.remove('d-none')
+          } else if (window.orientation === 90 || window.orientation === -90) {
+            document.getElementById('mobile-info').classList.add('d-none')
+          }
+      }
+      window.addEventListener('orientationchange', updateOrientation);
+      updateOrientation();
+      
+  } else {
+      console.log("Die Seite wird nicht auf einem Mobilgerät geöffnet.");
+  }
+}
+
+document.addEventListener('DOMContentLoaded', output);
