@@ -11,6 +11,8 @@ class Endboss extends MovableObject {
         bottom: 15,
         top: 60,
       }
+
+    soundplayed = true
     IMAGES_ALERT = [
         'img/4_enemie_boss_chicken/2_alert/G5.png',
         'img/4_enemie_boss_chicken/2_alert/G6.png',
@@ -83,6 +85,8 @@ class Endboss extends MovableObject {
                 this.bossGetDamageSequence();
             } 
         }, 125)
+
+
     }
 
 
@@ -97,6 +101,7 @@ class Endboss extends MovableObject {
         this.playAnimation(this.IMAGES_ATTACK);
         this.moveLeft();
         this.speed = 1
+        this.soundplayed = true;
     }
 
 
@@ -105,6 +110,7 @@ class Endboss extends MovableObject {
         this.moveLeft();
         this.speed = 30
         this.worldSounds.playEndbossStartSound()
+        this.soundplayed = true;
     }
 
 
@@ -124,7 +130,10 @@ class Endboss extends MovableObject {
 
     bossGetDamageSequence() {
         this.playAnimation(this.IMAGES_HURT)
-        this.worldSounds.playEndbossHitSound() 
+        if (this.soundplayed) {
+            this.worldSounds.playEndbossHitSound()
+            this.soundplayed = false;
+        }
     }
 
 

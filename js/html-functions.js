@@ -69,7 +69,7 @@ function helpFaqHTML() {
         <p>1. You can throw one bottle every 1.5/sek (look at => <img class="rules-cd-img" src="img/10_interactions/sandclock.png">)</p>
         <p>2. You can hold 5 bottles max.</p>
         <p>3. Normal and small Chickens are one shot, Boss have more energy</p>
-        <p>4. From time to time there spawn new enemys and bottles</p>
+        <p>4. From time to time there spawn new bottles</p>
     </div>
 `
 }

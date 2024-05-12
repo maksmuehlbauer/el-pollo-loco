@@ -1,5 +1,5 @@
 class Character extends MovableObject{
-    x = 4600;
+    x = 4000;
     y = 0;
     width = 150;
     height = 300
@@ -84,6 +84,7 @@ class Character extends MovableObject{
         this.animate();
     }
 
+    
     animate() {
         this.characterMovementAnimations();
         this.characterStateAnimations();

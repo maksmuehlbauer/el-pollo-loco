@@ -14,6 +14,7 @@ class WorldSounds {
     endbossStart_sound = new Audio('audio/enboss-starts.mp3')
     sound_chickenDead = new Audio('audio/chicken-dead.mp3');
 
+    // soundplayed = true
 
     playThrowSound() {
         this.throw_sound.volume = 0.3
@@ -94,7 +95,11 @@ class WorldSounds {
 
     playEndbossHitSound() {
         this.endbossHurt_sound.volume = 0.5
-        this.endbossHurt_sound.play();
+        this.endbossHurt_sound.play();       
+    }
+
+    pauseEndbossHitSound() {
+        this.endbossHurt_sound.pause();       
     }
 
 

@@ -13,6 +13,7 @@ class World {
     camera_x = 0;
     throwableObject = [];
     collectedCoins = 0;
+    defaultEnemyLength = this.level.enemies.length;
     killedChickens = 0;
     scores = [];
    
@@ -31,8 +32,6 @@ class World {
         this.checkCollisions();
         this.startTime = new Date().getTime();
         this.bottleCoolDown = 0;
-
-        // this.enemyDiesExecuted = [];
     }
 
 
@@ -53,29 +52,8 @@ class World {
         setInterval(() => {
             this.checkThrowObjects();
             this.removeThrownBottleFromMap();
+            this.checkChickenCount()
         }, 1000 / 60) 
-    }
-
-
-    checkThrowObjects() {
-        if (this.keyboard.THROW && this.throwableObject.length <= this.bottleCoolDown && this.statusBarBottle.bottlesvAvailable()) {
-                console.log(this.throwableObject.length)
-                this.statusBarBottle.setPercentage(this.statusBarBottle.percentage -= 20);
-                let bottle = new ThrowableObject(this.character.x, this.character.y);
-                this.throwableObject.push(bottle);
-                this.removeThrownBottleFromMap(bottle);
-                this.lastThrowTime = new Date().getTime()
-            }
-        }
-
-
-    removeThrownBottleFromMap(bottle) {
-        const index = this.throwableObject.indexOf(bottle);
-        if (index !== -1) {
-            setTimeout(() => {
-                this.throwableObject.splice(index, 1)
-            }, 1500);
-        }
     }
 
 
@@ -89,6 +67,17 @@ class World {
     }
 
 
+    checkThrowObjects() {
+        if (this.keyboard.THROW && this.throwableObject.length <= this.bottleCoolDown && this.statusBarBottle.bottlesvAvailable() && !this.character.otherDirection) {
+                this.statusBarBottle.setPercentage(this.statusBarBottle.percentage -= 20);
+                let bottle = new ThrowableObject(this.character.x, this.character.y);
+                this.throwableObject.push(bottle);
+                this.removeThrownBottleFromMap(bottle);
+                this.lastThrowTime = new Date().getTime();
+            }
+        }
+
+
     collisionEnemies() {
         this.level.enemies.forEach((enemy) => {
             if (this.character.isColliding(enemy)) {
@@ -98,20 +87,26 @@ class World {
         });
     }
     
+    removeThrownBottleFromMap(bottle) {
+        const index = this.throwableObject.indexOf(bottle);
+        if (index !== -1) {
+            setTimeout(() => {
+                this.throwableObject.splice(index, 1)
+            }, 1500);
+        }
+    }
 
 
     collisionBottleWithEnemies() {
         this.level.enemies.forEach((enemy, enemyIndex) => {
             this.throwableObject.forEach((bottle, bottleIndex) => {
                 if (bottle.isColliding(enemy)) {
-     
-                    enemy.hit(2);
                     bottle.speedX = 0;
+                    this.calculateEnemyDamage(enemy, enemyIndex);
                     if (this.enemyDies(enemyIndex)) {
                         enemy.speed = 0;
-                        enemy.isKilled = true
-                        this.removeDeadObjectFromWorld(enemyIndex)
-                       
+                        enemy.isKilled = true;
+                        this.removeDeadObjectFromWorld(enemyIndex);
                     }
                 }
             });
@@ -119,7 +114,19 @@ class World {
     }
 
 
+    calculateEnemyDamage(enemy, enemyIndex) {
+        if (this.findEndboss() !== undefined && this.level.enemies[enemyIndex] === this.findEndboss()) {
+            enemy.hit(1);
+        } else if (enemy.energy <= 20){
+            enemy.hit(20);
+        }
+    }
 
+
+    checkChickenCount() {
+        let currentEnemyLength = this.level.enemies.length
+        this.killedChickens = this.defaultEnemyLength - currentEnemyLength
+    }
 
     removeDeadObjectFromWorld(enemyIndex) {
         if (this.findEndboss() !== undefined && this.level.enemies[enemyIndex] === this.findEndboss()) {
@@ -139,19 +146,10 @@ class World {
     }
 
 
-
-
-
     bottleInArray() {
         return this.throwableObject.length > 0
     }
-
-    
-
-
-
-
-    
+  
         
     collisionBottleObject() {
         this.level.collectableBottles.forEach((collectObject) => {
@@ -323,7 +321,7 @@ class World {
             this.flipImage(mo)
         }
         mo.draw(this.ctx)
-        mo.drawFrame(this.ctx)
+        // mo.drawFrame(this.ctx)
         if (mo.otherDirection) {
             this.flipImageBack(mo)
         }

@@ -110,22 +110,26 @@ function isMobileDevice() {
 }
 
 
-function output() {
-  if (isMobileDevice()) {
-      console.log("Die Seite wird auf einem Mobilgerät geöffnet.");
-      function updateOrientation() {
-          if (window.orientation === 0) {
-            document.getElementById('mobile-info').classList.remove('d-none')
-          } else if (window.orientation === 90 || window.orientation === -90) {
-            document.getElementById('mobile-info').classList.add('d-none')
-          } 
-      }
-      window.addEventListener('orientationchange', updateOrientation);
-      // updateOrientation();
-    }
-    else {
-      console.log("Die Seite wird nicht auf einem Mobilgerät geöffnet.");
-    }
+function updateMobileOrientation() {
+  if (window.orientation === 0) {
+    document.getElementById('mobile-info').classList.remove('d-none')
+    console.log("portrait");
+  } else if (window.orientation === 90 || window.orientation === -90) {
+    document.getElementById('mobile-info').classList.add('d-none')
+    console.log("landscape");
+  } 
 }
 
-document.addEventListener('DOMContentLoaded', output);
+
+function checkDeviceOutput() {
+  if (isMobileDevice()) {      console.log("Die Seite wird auf einem Mobilgerät geöffnet.");
+      document.getElementById('mobile-info').classList.remove('d-none')
+      window.addEventListener('orientationchange', updateMobileOrientation);
+    }
+    // else {
+    //   console.log("Die Seite wird nicht auf einem Mobilgerät geöffnet.");
+    // }
+}
+
+
+document.addEventListener('DOMContentLoaded', checkDeviceOutput);
