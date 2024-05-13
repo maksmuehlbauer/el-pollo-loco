@@ -16,7 +16,7 @@ class World {
     defaultEnemyLength = this.level.enemies.length;
     killedChickens = 0;
     scores = [];
-   
+    
         
     
     // der Konstruktor wird ausgeführt sobald eine Instanz von der jeweiligen Klasse erstellt wird (in diese Fall der Klasse World)
@@ -63,6 +63,7 @@ class World {
             this.collisionBottleObject();
             this.collisionCoinObject();
             this.collisionBottleWithEnemies();
+            // this.collisionJumpingOnEnemy();
         }, 1000 / 30);
     }
 
@@ -79,13 +80,24 @@ class World {
 
 
     collisionEnemies() {
-        this.level.enemies.forEach((enemy) => {
+        this.level.enemies.forEach((enemy, enemyIndex) => {
             if (this.character.isColliding(enemy)) {
-                this.character.hit(2)
-                this.statusBarHp.setPercentage(this.character.energy)
+                if (this.character.isAboveGround() && enemy !== this.findEndboss()) {
+                    console.log('Hit From Above')
+                    enemy.hit(20)
+                    console.log(this.character.energy)
+                    if (this.enemyDies(enemyIndex)) {
+                        enemy.markDeadEnemy();
+                        this.removeDeadObjectFromWorld(enemyIndex);
+                    }
+                } else if (!this.character.isAboveGround() && !enemy.isDead()) {
+                    this.character.hit(2)
+                    this.statusBarHp.setPercentage(this.character.energy)
+                }
             }
         });
     }
+
     
     removeThrownBottleFromMap(bottle) {
         const index = this.throwableObject.indexOf(bottle);
@@ -104,14 +116,16 @@ class World {
                     bottle.speedX = 0;
                     this.calculateEnemyDamage(enemy, enemyIndex);
                     if (this.enemyDies(enemyIndex)) {
-                        enemy.speed = 0;
-                        enemy.isKilled = true;
+                        enemy.markDeadEnemy();
                         this.removeDeadObjectFromWorld(enemyIndex);
                     }
                 }
             });
         });
     }
+
+
+
 
 
     calculateEnemyDamage(enemy, enemyIndex) {

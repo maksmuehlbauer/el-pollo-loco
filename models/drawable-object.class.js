@@ -28,16 +28,6 @@ class DrawableObject {
         ctx.drawImage(this.img, this.x, this.y, this.width * 1, this.height);
     }
 
-    // JUNUS
-    // drawFrame(ctx) {
-    //     if (this instanceof Character || this instanceof Chicken || this instanceof ChickenSmall || this instanceof Endboss || this instanceof CollectableObjects) {
-    //         ctx.beginPath();
-    //         ctx.lineWidth = "5";
-    //         ctx.strokeStyle = "blue";
-    //         ctx.rect(this.x, this.y, this.width, this.height);
-    //         ctx.stroke();
-    //     }
-    // }
 
 
     drawFrame(ctx) {
