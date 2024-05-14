@@ -1,3 +1,7 @@
+/**
+ * Represents a coin object in the game.
+ * @extends MovableObject
+ */
 class CoinObject extends MovableObject {
     width = 40;
     height = 40;
@@ -8,6 +12,12 @@ class CoinObject extends MovableObject {
     ]
 
 
+    /**
+     * Creates a new CoinObject instance.
+     * @param {string} imagePath - The path to the image of the coin.
+     * @param {number} x - The initial x-coordinate of the coin.
+     * @param {number} y - The initial y-coordinate of the coin.
+     */
     constructor(imagepath, x, y,) {
         super()
         this.loadImage(imagepath);
@@ -18,6 +28,9 @@ class CoinObject extends MovableObject {
     }
 
 
+    /**
+     * Animates the coin.
+     */
     animate() {
         setInterval(() => {
             this.playAnimation(this.IMAGES_ANIMATION)

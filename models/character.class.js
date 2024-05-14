@@ -1,3 +1,7 @@
+/**
+ * Represents the user character in the game.
+ * @extends MovableObject
+ */
 class Character extends MovableObject{
     x = 0;
     y = 0;
@@ -5,7 +9,7 @@ class Character extends MovableObject{
     height = 300
     speed = 10;
     shortIdleCD = 0;
-    longIdleCD = 5;
+    longIdleCD = 15;
     offset = {
         left: 20,
         right: 15,
@@ -69,9 +73,11 @@ class Character extends MovableObject{
         'img/2_character_pepe/1_idle/long_idle/I-19.png',
         'img/2_character_pepe/1_idle/long_idle/I-20.png'
     ]
-    world;     // Link so that you can access all variables in the World class with the Character class (Primary for keyboard Class)
+    world;
  
-
+    /**
+     * Creates a new Character instance.
+     */
     constructor() {
         super().loadImage('img/2_character_pepe/2_walk/W-21.png');
         this.loadImages(this.IMAGES_WALKING);
@@ -85,12 +91,18 @@ class Character extends MovableObject{
     }
 
     
+    /**
+     * Animates character movement and state.
+     */
     animate() {
         this.characterMovementAnimations();
         this.characterStateAnimations();
     }
 
 
+    /**
+    * Animates character movement based on keyboard input.
+    */
     characterMovementAnimations() {
         setInterval(() => {
             this.world.worldSounds.pauseCharacterWalkSound();
@@ -113,6 +125,9 @@ class Character extends MovableObject{
     }
 
 
+    /**
+    * Animates character state based on various conditions.
+    */
     characterStateAnimations() {
         let characterAnimation = setInterval(() => {
             this.world.worldSounds.pauseCharacterSleepingSound();
@@ -134,14 +149,22 @@ class Character extends MovableObject{
             } else if (this.shortAFK()) {
                 this.playAnimation(this.IMAGES_IDLE_SHORT)
             }                 
-            }, 125 )
+        }, 125 )
     }
 
-
+    /**
+     * Checks if the character has been idle for a short period.
+     * @returns {boolean} True if the character has been idle for a short period, false otherwise.
+     */
     shortAFK() {
         return this.world.keyboard.calculateElapsedTime() > this.shortIdleCD
     }
 
+    
+    /**
+     * Checks if the character has been idle for a long period.
+     * @returns {boolean} True if the character has been idle for a long period, false otherwise.
+     */
     longAFK() {
         return this.world.keyboard.calculateElapsedTime() > this.longIdleCD
     }

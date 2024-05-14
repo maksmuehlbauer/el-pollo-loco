@@ -1,4 +1,7 @@
-
+/**
+ * Represents a throwable object in the game, extending the MovableObject class.
+ * @extends MovableObject
+ */
 class ThrowableObject extends MovableObject {
     worldSounds = new WorldSounds();
     IMAGES_BOTTLE_SPLASH = [
@@ -18,6 +21,11 @@ class ThrowableObject extends MovableObject {
     ]
     
 
+    /**
+     * Creates a new ThrowableObject.
+     * @param {number} x - The x-coordinate of the object.
+     * @param {number} y - The y-coordinate of the object.
+     */
     constructor(x, y) {
         super().loadImage('img/6_salsa_bottle/salsa_bottle.png')
         this.loadImages(this.IMAGES_BOTTLE_SPLASH);
@@ -34,7 +42,10 @@ class ThrowableObject extends MovableObject {
         this.speedX = 15;
     }
 
-        
+
+    /**
+     * Animates the bottle based on its state.
+     */
     animate() {
         let bottleAnimation = setInterval(() => {
             if (this.isFlying() && this.isInAir()) {
@@ -42,7 +53,6 @@ class ThrowableObject extends MovableObject {
             }  
             else {
                 this.speedY = 0;
-                // this.speedX = 0;
                 this.acceleration = 0;
                 this.playAnimation(this.IMAGES_BOTTLE_SPLASH);
                 this.worldSounds.playBreakBottleSound()
@@ -54,17 +64,27 @@ class ThrowableObject extends MovableObject {
     }
 
 
+    /**
+     * Checks if the bottle is in the air.
+     * @returns {boolean} - True if the bottle is in the air, false otherwise.
+     */
     isInAir() {
         return this.y < 370;
     }
 
 
+    /**
+     * Checks if the bottle is flying.
+     * @returns {boolean} - True if the bottle is flying, false otherwise.
+     */
     isFlying() {
         return this.speedX > 0
     }
 
 
-
+    /**
+     * Makes the bottle fly horizontally.
+     */
     bottleFly() {
         setInterval(() => {
             if (this.y < 370) {
@@ -72,6 +92,5 @@ class ThrowableObject extends MovableObject {
             }
         }, 30);
     }
-
 }
 

@@ -1,3 +1,6 @@
+/**
+ * Represents the game world.
+ */
 class World {
     character = new Character();
     statusBarHp = new StatusBarHp();
@@ -19,7 +22,12 @@ class World {
     
         
     
-    // der Konstruktor wird ausgeführt sobald eine Instanz von der jeweiligen Klasse erstellt wird (in diese Fall der Klasse World)
+    /**
+     * Constructs a new World.
+     * @param {HTMLCanvasElement} canvas - The canvas element.
+     * @param {Keyboard} keyboard - The keyboard controller.
+     * @param {WorldSounds} worldSounds - The sounds of the game world.
+     */
     constructor(canvas, keyboard, worldSounds) {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
@@ -35,6 +43,9 @@ class World {
     }
 
 
+    /**
+     * Stops all intervals.
+     */
     stopAllIntervals() {
         for (let i = 1; i < 9999; i++) {
             window.clearInterval(i)
@@ -42,12 +53,17 @@ class World {
     }
 
     
-    // Link so that you can access all variables in the World class with the Character class (Primary for keyboard Class)
+    /**
+     * Sets the world for the character.
+     */
     setWorld() {
         this.character.world = this
     }
 
 
+    /**
+     * Runs the game loop.
+     */
     run() {
         setInterval(() => {
             this.checkThrowObjects();
@@ -57,17 +73,22 @@ class World {
     }
 
 
+    /**
+     * Checks for collisions in the game.
+     */
     checkCollisions() {
         setInterval(() => {
             this.collisionEnemies();
             this.collisionBottleObject();
             this.collisionCoinObject();
             this.collisionBottleWithEnemies();
-            // this.collisionJumpingOnEnemy();
         }, 1000 / 30);
     }
 
 
+    /**
+     * Checks for throwable objects and handles throwing.
+     */
     checkThrowObjects() {
         if (this.keyboard.THROW && this.throwableObject.length <= this.bottleCoolDown && this.statusBarBottle.bottlesvAvailable() && !this.character.otherDirection) {
                 this.statusBarBottle.setPercentage(this.statusBarBottle.percentage -= 20);
@@ -79,13 +100,14 @@ class World {
         }
 
 
+    /**
+     * Handles collisions between the player and enemies.
+     */
     collisionEnemies() {
         this.level.enemies.forEach((enemy, enemyIndex) => {
             if (this.character.isColliding(enemy)) {
                 if (this.character.isAboveGround() && enemy !== this.findEndboss()) {
-                    console.log('Hit From Above')
                     enemy.hit(20)
-                    console.log(this.character.energy)
                     if (this.enemyDies(enemyIndex)) {
                         enemy.markDeadEnemy();
                         this.removeDeadObjectFromWorld(enemyIndex);
@@ -99,6 +121,10 @@ class World {
     }
 
     
+    /**
+     * Removes a thrown bottle from the map after a delay.
+     * @param {ThrowableObject} bottle - The bottle to remove.
+     */
     removeThrownBottleFromMap(bottle) {
         const index = this.throwableObject.indexOf(bottle);
         if (index !== -1) {
@@ -109,6 +135,9 @@ class World {
     }
 
 
+    /**
+     * Checks for collisions between throwable objects and enemies.
+     */
     collisionBottleWithEnemies() {
         this.level.enemies.forEach((enemy, enemyIndex) => {
             this.throwableObject.forEach((bottle, bottleIndex) => {
@@ -125,9 +154,11 @@ class World {
     }
 
 
-
-
-
+    /**
+     * Calculates damage to an enemy.
+     * @param {Enemy} enemy - The enemy object.
+     * @param {number} enemyIndex - The index of the enemy in the enemies array.
+     */
     calculateEnemyDamage(enemy, enemyIndex) {
         if (this.findEndboss() !== undefined && this.level.enemies[enemyIndex] === this.findEndboss()) {
             enemy.hit(1);
@@ -137,11 +168,19 @@ class World {
     }
 
 
+    /**
+     * Checks the number of killed chickens.
+     */
     checkChickenCount() {
         let currentEnemyLength = this.level.enemies.length
         this.killedChickens = this.defaultEnemyLength - currentEnemyLength
     }
 
+
+    /**
+     * Removes dead enemies from the world.
+     * @param {number} enemyIndex - The index of the enemy to remove.
+     */
     removeDeadObjectFromWorld(enemyIndex) {
         if (this.findEndboss() !== undefined && this.level.enemies[enemyIndex] === this.findEndboss()) {
             setTimeout(() => {
@@ -155,16 +194,28 @@ class World {
     }
 
 
+    /**
+     * Checks if an enemy is dead.
+     * @param {number} enemyIndex - The index of the enemy to check.
+     * @returns {boolean} - True if the enemy is dead, otherwise false.
+     */
     enemyDies(enemyIndex) {
         return this.level.enemies[enemyIndex].energy <= 0
     }
 
 
+    /**
+     * Checks if throwable objects are present in the world.
+     * @returns {boolean} - True if there are throwable objects, otherwise false.
+     */
     bottleInArray() {
         return this.throwableObject.length > 0
     }
   
         
+    /**
+     * Handles collisions between the character and collectable bottles.
+     */
     collisionBottleObject() {
         this.level.collectableBottles.forEach((collectObject) => {
             if (this.statusBarBottle.bottlesFull() && this.character.isColliding(collectObject)) { 
@@ -177,6 +228,9 @@ class World {
     }
 
 
+    /**
+     * Handles collisions between the character and collectable coins.
+     */
     collisionCoinObject() {
         this.level.collectableCoins.forEach((collectObject, index) => {
             if (this.character.isColliding(collectObject)) {
@@ -188,6 +242,9 @@ class World {
     }
 
 
+    /**
+     * Handles the victory condition of the game.
+     */
     victory() {
         let victoryInterval = setInterval(() => {
             if (this.findEndboss().isDead()) {
@@ -204,6 +261,9 @@ class World {
     }
 
 
+    /**
+     * Displays the victory screen.
+     */
     victoryScreen() {
         document.getElementById('btn-box').innerHTML = window.victoryScreenHTML();
         document.getElementById('game-overlay').classList.add('victory-overlay');
@@ -211,12 +271,19 @@ class World {
     }
 
     
+    /**
+     * Finds the end boss enemy in enemy array.
+     * @returns {Enemy} - The end boss enemy object if found, otherwise undefined.
+     */
     findEndboss() {
         let endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
         return endboss;
     }
 
 
+    /**
+     * Pushes the scores of the current game session to the scores array.
+     */
     pushScores() {
         this.scores.push({
             "chickens" : this.killedChickens,
@@ -226,6 +293,9 @@ class World {
     }
 
 
+    /**
+     * Displays the game over screen.
+     */
     showGameOverScreen() {
         document.getElementById('btn-box').innerHTML = window.showGameOverScreenHTML();
         document.getElementById('game-overlay').classList.add('game-over-overlay');
@@ -235,7 +305,9 @@ class World {
     }
     
 
-
+    /**
+     * Handles the game over condition of the game.
+     */
     gameOver() {
         let gameOverInterval = setInterval(() => {
             if (this.character.isDead()) {
@@ -250,6 +322,9 @@ class World {
     }
 
 
+    /**
+     * Clears the canvas, translates it according to camera position, draws the map, HUD, and requests animation frame.
+     */
     draw() {
         this.ctx.clearRect(0,0, this.canvas.width, this.canvas.height);
         this.ctx.translate(this.camera_x, 0);
@@ -260,6 +335,9 @@ class World {
     }
 
 
+    /**
+     * Requests animation frame for continuous drawing.
+     */
     drawAnimationFrame() {
         let self = this
         requestAnimationFrame(function() {
@@ -267,6 +345,10 @@ class World {
         });
     }
 
+    
+    /**
+     * Draws the game map.
+     */
     drawMap() {
         this.addObjectsToMap(this.level.bgObjects);
         this.addObjectsToMap(this.level.collectableBottles);
@@ -279,6 +361,9 @@ class World {
     }
 
 
+    /**
+     * Draws the heads-up display (HUD) if character is alive.
+     */
     drawHud() {
         if (!this.character.isDead()) {
             let endboss = this.findEndboss();
@@ -295,6 +380,9 @@ class World {
     }
 
 
+    /**
+     * Draws player counts on the HUD.
+     */
     drawPlayerCounts() {
         this.ctx.font = '18px Sancreek';
         this.ctx.fillStyle = 'white';
@@ -305,6 +393,10 @@ class World {
     }
 
 
+    /**
+     * Calculates elapsed time since the game started.
+     * @returns {number} - Elapsed time in seconds.
+     */
      calculateElapsedTime() {
         let currentTime = new Date().getTime();
         let elapsedTime = currentTime - this.startTime;
@@ -313,6 +405,10 @@ class World {
     }
 
 
+    /**
+     * Calculates remaining cooldown time for throwing objects.
+     * @returns {number} - Remaining cooldown time in seconds.
+     */
     calculateThrowCoolDown() {
         let lastThrowTime = this.lastThrowTime || 0;
         let currentTime = new Date().getTime();
@@ -323,6 +419,10 @@ class World {
     }
     
 
+    /**
+     * Adds objects to the map for drawing.
+     * @param {Array} objects - Array of objects to add to the map.
+     */
     addObjectsToMap(objects) {
         objects.forEach( object => {
             this.addToMap(object)
@@ -330,6 +430,10 @@ class World {
     }
 
 
+    /**
+     * Draws an object on the map.
+     * @param {Object} mo - The object to draw.
+     */
     addToMap(mo) {
         if (mo.otherDirection) {
             this.flipImage(mo)
@@ -342,6 +446,10 @@ class World {
     }
 
 
+    /**
+     * Flips the image horizontally.
+     * @param {Object} mo - The object whose image is flipped.
+     */
     flipImage(mo) {
         this.ctx.save();
         this.ctx.translate(mo.width, 0);
@@ -350,12 +458,19 @@ class World {
     }
 
 
+    /**
+     * Flips the image back to its original state.
+     * @param {Object} mo - The object whose image is flipped back.
+     */
     flipImageBack(mo) {
         mo.x = mo.x * -1;
         this.ctx.restore();
     }
 
 
+    /**
+     * Saves scores to local storage.
+     */
     saveScores() {
         this.loadFromStorage()
         scores.push({
@@ -367,6 +482,9 @@ class World {
     }
     
 
+    /**
+     * Loads scores from local storage.
+     */
     loadFromStorage() {
         if (localStorage.getItem("Scores")) {
             scores = JSON.parse(localStorage.getItem("Scores"));

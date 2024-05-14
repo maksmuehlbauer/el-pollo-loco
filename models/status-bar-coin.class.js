@@ -1,3 +1,7 @@
+/**
+ * Represents a status bar for coins in the game.
+ * @extends StatusBar
+ */
 class StatusBarCoin extends StatusBar {
     percentage = 0
     emptyCoins = 0
@@ -12,6 +16,10 @@ class StatusBarCoin extends StatusBar {
         'img/7_statusbars/1_statusbar/1_statusbar_coin/blue/100.png'
     ];
 
+
+    /**
+     * Constructs a new StatusBarCoin object.
+     */
     constructor() {
         super();
         this.loadImages(this.IMAGES);
@@ -21,11 +29,19 @@ class StatusBarCoin extends StatusBar {
     }
 
 
+    /**
+     * Checks if coins are available.
+     * @returns {boolean} True if coins are available, false otherwise.
+     */
     coinsvAvailable() {
         return this.percentage > this.emptyCoins
     }
 
     
+    /**
+     * Checks if coins are full.
+     * @returns {boolean} True if coins are full, false otherwise.
+     */
     coinsFull() {
         return this.percentage < this.fullCoins
     }

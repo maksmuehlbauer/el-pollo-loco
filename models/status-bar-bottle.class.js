@@ -1,3 +1,7 @@
+/**
+ * Represents a status bar for bottles in the game.
+ * @extends StatusBar
+ */
 class StatusBarBottle extends StatusBar {
     percentage = 60
     emptyBottles = 0
@@ -12,6 +16,10 @@ class StatusBarBottle extends StatusBar {
         'img/7_statusbars/1_statusbar/3_statusbar_bottle/blue/100.png',
     ];
 
+
+    /**
+     * Constructs a new StatusBarBottle object.
+     */
     constructor() {
         super();
         this.loadImages(this.IMAGES);
@@ -21,11 +29,19 @@ class StatusBarBottle extends StatusBar {
     }
 
 
+    /**
+     * Checks if bottles are available.
+     * @returns {boolean} True if bottles are available, false otherwise.
+     */
     bottlesvAvailable() {
         return this.percentage > this.emptyBottles
     }
 
     
+    /**
+     * Checks if bottles are full.
+     * @returns {boolean} True if bottles are full, false otherwise.
+     */
     bottlesFull() {
         return this.percentage < this.fullBottles
     }

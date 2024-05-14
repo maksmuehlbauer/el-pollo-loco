@@ -10,14 +10,4 @@ class CollectableObjects extends DrawableObject {
 
     // }
 
-
-
-
-
-
-
-
-
-
-
 }

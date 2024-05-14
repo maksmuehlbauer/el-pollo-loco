@@ -1,3 +1,6 @@
+/**
+ * Represents a keyboard controller for player input.
+ */
 class Keyboard {
     LEFT = false;
     RIGHT = false;
@@ -8,7 +11,9 @@ class Keyboard {
     lastKeyboardAction = 6;
 
     
-    
+    /**
+     * Creates an instance of Keyboard.
+     */
     constructor() {
         this.desktopPressEvents();
         this.mobilePressEvents();
@@ -16,6 +21,9 @@ class Keyboard {
     }
 
 
+    /**
+     * Sets up touch events for mobile controls.
+     */
     mobilePressEvents() {
         document.getElementById('btn-left').addEventListener('touchstart', (e) => {
             if (e.cancelable) e.preventDefault();
@@ -63,8 +71,11 @@ class Keyboard {
         
     }
 
+
+    /**
+     * Sets up desktop keyboard events.
+     */
     desktopPressEvents() {
-        
         window.addEventListener("keydown", (event) => {
             this.lastKeyboardInput()
             // console.log(event)
@@ -121,6 +132,10 @@ class Keyboard {
     }
 
 
+    /**
+     * Calculates the elapsed time since the last keyboard action.
+     * @returns {number} The elapsed time in seconds.
+     */
     calculateElapsedTime() {
         let currentTime = new Date().getTime();
         let elapsedTime = currentTime - this.lastKeyboardAction
@@ -129,6 +144,10 @@ class Keyboard {
     }
 
     
+    /**
+     * Updates the timestamp of the last keyboard action.
+     * @returns {number} The updated timestamp.
+     */
     lastKeyboardInput() {
         this.lastKeyboardAction = new Date().getTime();
         return this.lastKeyboardAction

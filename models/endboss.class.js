@@ -1,3 +1,7 @@
+/**
+ * Represents the end boss character in the game.
+ * @extends MovableObject
+ */
 class Endboss extends MovableObject {
     worldSounds = new WorldSounds()
     y = 125;
@@ -51,6 +55,9 @@ class Endboss extends MovableObject {
     ]
 
 
+    /**
+     * Creates an instance of the Endboss class.
+     */
     constructor() {
         super().loadImage('img/4_enemie_boss_chicken/2_alert/G5.png')
         this.loadImages(this.IMAGES_ALERT)
@@ -65,6 +72,9 @@ class Endboss extends MovableObject {
     }
 
 
+    /**
+     * Animates the boss's behavior.
+     */
     animate() {
         setInterval(() => {
             if (this.startBossFight()) {
@@ -85,18 +95,21 @@ class Endboss extends MovableObject {
                 this.bossGetDamageSequence();
             } 
         }, 125)
-
-
     }
 
 
+    /**
+     * Initiates the sequence when the boss starts moving.
+     */
     bossStartSequence() {
         this.playAnimation(this.IMAGES_WALK);
         this.moveLeft();
         this.worldSounds.playEndbossStartSound()
     }
 
-
+    /**
+     * Initiates the sequence when the character is close to the boss for an attack.
+     */
     closeToBossAttackSequence() {
         this.playAnimation(this.IMAGES_ATTACK);
         this.moveLeft();
@@ -105,6 +118,30 @@ class Endboss extends MovableObject {
     }
 
 
+    /**
+     * Initiates the sequence when the boss starts moving.
+     */
+    bossStartSequence() {
+        this.playAnimation(this.IMAGES_WALK);
+        this.moveLeft();
+        this.worldSounds.playEndbossStartSound();
+    }
+
+
+    /**
+     * Initiates the sequence when the character is close to the boss for an attack.
+     */
+    closeToBossAttackSequence() {
+        this.playAnimation(this.IMAGES_ATTACK);
+        this.moveLeft();
+        this.speed = 1;
+        this.soundplayed = true;
+    }
+
+
+    /**
+     * Initiates the sequence when the character is far from the boss for an attack.
+     */
     farFromBossAttackSequence() {
         this.playAnimation(this.IMAGES_ATTACK);
         this.moveLeft();
@@ -114,6 +151,9 @@ class Endboss extends MovableObject {
     }
 
 
+    /**
+     * Initiates the default walking sequence to the left.
+     */
     defaultlWalkLeftSequence() {
         this.playAnimation(this.IMAGES_WALK);
         this.moveLeft();
@@ -121,6 +161,9 @@ class Endboss extends MovableObject {
     }
 
 
+    /**
+     * Initiates the sequence when the boss dies.
+     */
     bossIsDeadSequence() {
         this.playAnimation(this.IMAGES_DEAD)
         this.worldSounds.playEndbossDieSound();
@@ -128,6 +171,9 @@ class Endboss extends MovableObject {
     }
 
 
+    /**
+     * Initiates the sequence when the boss gets damaged.
+     */
     bossGetDamageSequence() {
         this.playAnimation(this.IMAGES_HURT)
         if (this.soundplayed) {
@@ -137,22 +183,37 @@ class Endboss extends MovableObject {
     }
 
 
+    /**
+     * Checks if the boss is at its starting position.
+     * @returns {boolean} True if the boss is at its starting position, otherwise false.
+     */
     startingPosition() {
         return this.x === 5100
     }
 
 
+    /**
+     * Checks if the boss fight has started.
+     * @returns {boolean} True if the boss fight has started, otherwise false.
+     */
     startBossFight() {
         return world.character.x >= 4550
     }
 
 
+    /**
+     * Calculates the distance between the character and the boss.
+     * @returns {number} The distance between the character and the boss.
+     */
     distanceCharToBoss() {
         let distance = Math.abs(world.character.x - this.x)
         return distance
     }
+    
 
-
+    /**
+     * Moves the boss.
+     */
     move() {
         setInterval( () => {
             this.moveLeft()

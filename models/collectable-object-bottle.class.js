@@ -1,3 +1,7 @@
+/**
+ * Represents a bottle object in the game.
+ * @extends MovableObject
+ */
 class BottleObject extends MovableObject {
     width = 100;
     height = 100;
@@ -7,6 +11,11 @@ class BottleObject extends MovableObject {
     ]
 
 
+    /**
+     * Creates a new BottleObject instance.
+     * @param {string} imagePath - The path to the image of the bottle.
+     * @param {number} x - The initial x-coordinate of the bottle.
+     */
     constructor(imagePath, x) {
         super()
         this.loadImage(imagePath);
@@ -16,6 +25,10 @@ class BottleObject extends MovableObject {
         this.y = 350 + Math.random() * 25
     }
 
+
+    /**
+     * Animates the bottle.
+     */
     animate() {
         setInterval(() => {
             this.playAnimation(this.IMAGES_ANIMATION)

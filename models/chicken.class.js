@@ -1,10 +1,11 @@
+/**
+ * Represents a normal chicken enemy in the game.
+ * @extends MovableObject
+ */
 class Chicken extends MovableObject  {
     y = 375;
     width = 55;
     height = 70;
-
-    
-
     IMAGES_WALKING = [
         'img/3_enemies_chicken/chicken_normal/1_walk/1_w.png',
         'img/3_enemies_chicken/chicken_normal/1_walk/2_w.png',
@@ -17,6 +18,9 @@ class Chicken extends MovableObject  {
     sound_chickenDead = new Audio('audio/chicken-dead.mp3');
     
 
+    /**
+     * Creates a new Chicken instance.
+     */
     constructor() {
         super().loadImage('img/3_enemies_chicken/chicken_normal/1_walk/1_w.png')
         this.loadImages(this.IMAGES_WALKING)
@@ -28,13 +32,18 @@ class Chicken extends MovableObject  {
     }
 
     
-
+    /**
+     * Animates chicken movement and state.
+     */
     animate() {
         this.moveLeftState();
         this.chickenStateAnimations();
     }
 
 
+    /**
+     * Continuously moves the chicken left.
+     */
     moveLeftState() {
         setInterval( () => {
             this.moveLeft()
@@ -42,6 +51,9 @@ class Chicken extends MovableObject  {
     }
 
 
+    /**
+     * Animates the chicken state based on various conditions.
+     */
     chickenStateAnimations() {
         let chickenAnimation = setInterval(() => {
             if (this.moveLeft) {
@@ -56,9 +68,11 @@ class Chicken extends MovableObject  {
     }
 
 
+    /**
+     * Plays the sound of a chicken dying.
+     */
     playChickenDieSound() {
         this.sound_chickenDead.volume = 0.1;
         this.sound_chickenDead.play();
     }
-
 }

@@ -1,3 +1,7 @@
+/**
+ * Represents a small chicken enemy in the game.
+ * @extends MovableObject
+ */
 class ChickenSmall extends MovableObject {
     y = 375;
     width = 55;
@@ -14,6 +18,9 @@ class ChickenSmall extends MovableObject {
     sound_chickenDead = new Audio('audio/chicken-dead.mp3');
 
 
+    /**
+     * Creates a new ChickenSmall instance.
+     */
     constructor() {
         super().loadImage('img/3_enemies_chicken/chicken_small/1_walk/1_w.png')
         this.loadImages(this.IMAGES_WALKING)
@@ -24,12 +31,19 @@ class ChickenSmall extends MovableObject {
         this.energy = 20;
     }
 
+
+    /**
+     * Animates chicken movement and state.
+     */
     animate() {
         this.moveLeftState();
         this.chickenStateAnimations();
     }
 
-
+    
+    /**
+     * Continuously moves the chicken left.
+     */
     moveLeftState() {
         setInterval( () => {
             this.moveLeft()
@@ -37,6 +51,9 @@ class ChickenSmall extends MovableObject {
     }
 
 
+    /**
+     * Animates the chicken state based on various conditions.
+     */
     chickenStateAnimations() {
         let chickenSmallAnimation = setInterval(() => {
             if (this.moveLeft) {
@@ -51,6 +68,9 @@ class ChickenSmall extends MovableObject {
     }
 
 
+    /**
+     * Plays the sound of a chicken dying.
+     */
     playChickenDieSound() {
         this.sound_chickenDead.volume = 0.1;
         this.sound_chickenDead.play();

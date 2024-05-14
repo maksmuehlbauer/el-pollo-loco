@@ -6,12 +6,18 @@ let scores = [];
 loadScores();
 
 
+/**
+ * Initializes the canvas element.
+ */
 function init() {
     canvas = document.getElementById('canvas');
-    // startGame();
 }
 
 
+/**
+ * Retries the current level.
+ * @param {string} id - The ID of victory or loosing HTML Element.
+ */
 function retryLevel(id) {
     document.getElementById('show-scores-box').remove();
     document.getElementById('game-overlay').classList.remove(id);
@@ -19,11 +25,17 @@ function retryLevel(id) {
 }
 
 
+/**
+ * Redirects to the main menu page.
+ */
 function MainMenu() {
     window.location.href = 'index.html';    
 }
 
 
+/**
+ * Starts the game by hiding the game overlay, initializing the world, and showing controls.
+ */
 function startGame() {
     document.getElementById('game-overlay').style.display = "none";
     initWorld();
@@ -31,6 +43,9 @@ function startGame() {
 }
 
 
+/**
+ * Initializes the game world by creating a new World instance, drawing it, and playing background sounds.
+ */
 function initWorld() {
   world = new World(canvas, keyboard, worldSounds);
   world.draw();
@@ -38,16 +53,25 @@ function initWorld() {
 }
 
 
+/**
+ * Displays the movement controls box.
+ */
 function showControls() {
     document.getElementById('movement-box').classList.remove('d-none');
 }
 
 
+/**
+ * Displays the help/FAQ content on the game overlay.
+ */
 function helpFaq() {
     document.getElementById('game-overlay').innerHTML = helpFaqHTML();
 }
 
 
+/**
+ * Displays the top five scores on the game overlay.
+ */
 function showScoreBoard() {
     sortScores();
     let topFiveScores = scores.slice(0, 5);
@@ -59,6 +83,9 @@ function showScoreBoard() {
 }
 
 
+/**
+ * Sorts the scores array based on coins collected, time taken, and chickens rescued.
+ */
 function sortScores() {
     scores.sort((a, b) => {
         if (parseInt(a.coins) !== parseInt(b.coins)) {
@@ -72,6 +99,9 @@ function sortScores() {
 }
 
 
+/**
+ * Loads scores data from local storage.
+ */
 function loadScores() {
     let ScoresAsText = localStorage.getItem("Scores");
     if (scores) {
@@ -79,12 +109,20 @@ function loadScores() {
     }
   }
 
+
+/**
+ * Enters fullscreen mode by toggling the fullscreen state of the canvas element.
+ */
 function fullscreen() {
   let fullscreen = document.getElementById('canvas');
   enterFullscreen(fullscreen)
 }
 
 
+/**
+ * Enters fullscreen mode for the specified element.
+ * @param {HTMLElement} element - The element to enter fullscreen mode.
+ */
 function enterFullscreen(element) {
   if(element.requestFullscreen) {
     element.requestFullscreen();
@@ -96,6 +134,9 @@ function enterFullscreen(element) {
 }
 
 
+/**
+ * Exits fullscreen mode.
+ */
 function exitFullscreen() {
   if(document.exitFullscreen) {
     document.exitFullscreen();
@@ -105,11 +146,18 @@ function exitFullscreen() {
 }
 
 
+/**
+ * Checks if the current device is a mobile device.
+ * @returns {boolean} True if the current device is a mobile device, false otherwise.
+ */
 function isMobileDevice() {
   return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 }
 
 
+/**
+ * Updates the display based on the mobile device orientation.
+ */
 function updateMobileOrientation() {
   if (window.orientation === 0) {
     document.getElementById('mobile-info').classList.remove('d-none')
@@ -121,15 +169,18 @@ function updateMobileOrientation() {
 }
 
 
+/**
+ * Checks the device type and sets up event listener for orientation change if it's a mobile device.
+ */
 function checkDeviceOutput() {
-  if (isMobileDevice()) {      console.log("Die Seite wird auf einem Mobilgerät geöffnet.");
+  if (isMobileDevice()) { 
       document.getElementById('mobile-info').classList.remove('d-none')
       window.addEventListener('orientationchange', updateMobileOrientation);
     }
-    // else {
-    //   console.log("Die Seite wird nicht auf einem Mobilgerät geöffnet.");
-    // }
 }
 
 
+/**
+ * Listens for the DOMContentLoaded event and calls checkDeviceOutput when the DOM is fully loaded.
+ */
 document.addEventListener('DOMContentLoaded', checkDeviceOutput);

@@ -1,6 +1,8 @@
+/**
+ * Represents a status bar for health points (HP) in the game.
+ * @extends StatusBar
+ */
 class StatusBarHp extends StatusBar {
-    
-
     IMAGES = [
         'img/7_statusbars/1_statusbar/2_statusbar_health/blue/0.png',
         'img/7_statusbars/1_statusbar/2_statusbar_health/blue/20.png',
@@ -11,6 +13,10 @@ class StatusBarHp extends StatusBar {
 
     ];
 
+
+    /**
+     * Constructs a new StatusBarHp object.
+     */
     constructor() {
         super();
         this.loadImages(this.IMAGES);

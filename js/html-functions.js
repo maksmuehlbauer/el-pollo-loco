@@ -1,3 +1,7 @@
+/**
+ * Generates HTML content for the game over screen.
+ * @returns {string} HTML content for the game over screen.
+ */
 window.showGameOverScreenHTML = function () {
     return /*html*/`
     <a href="#" class="button btn-animation-over" onclick="retryLevel('game-over-overlay')">
@@ -14,6 +18,13 @@ window.showGameOverScreenHTML = function () {
 }
 
 
+/**
+ * Generates HTML content for displaying scores.
+ * @param {number} chickens - The number of chickens defeated.
+ * @param {number} coins - The number of coins collected.
+ * @param {number} time - The time taken to complete the level.
+ * @returns {string} HTML content for displaying scores.
+ */
 window.showScoresBoxHTML = function(chickens, coins, time) {
     return /*html*/`
     <div id="show-scores-box">
@@ -34,6 +45,11 @@ window.showScoresBoxHTML = function(chickens, coins, time) {
 `
 }
 
+
+/**
+ * Generates HTML content for the victory screen.
+ * @returns {string} HTML content for the victory screen.
+ */
 window.victoryScreenHTML = function() {
     return /*html*/`
     <a href="#" class="button btn-animation-victory" onclick="retryLevel('victory-overlay')">
@@ -50,6 +66,10 @@ window.victoryScreenHTML = function() {
 }
 
 
+/**
+ * Generates HTML content for the help/FAQ section.
+ * @returns {string} HTML content for the help/FAQ section.
+ */
 function helpFaqHTML() {
     return /*html*/`
     <a href="index.html" class="button btn-back">
@@ -59,7 +79,7 @@ function helpFaqHTML() {
     </a>
     <div id="rules">
         <h2>Rules:</h2>
-        <p>1. Defeat the final boss, to save your Scores</p>
+        <p>1. Defeat the final boss to get a place on the scoreboard</p>
         <p>2. if your energy bar drops to zero, you lose.</p>
         <p>3. Loosing dont save scores</p>
         <p>4. measured values = Coins > Time > defeated Chickens</p>
@@ -75,6 +95,10 @@ function helpFaqHTML() {
 }
 
 
+/**
+ * Generates HTML content for displaying the top 5 scores.
+ * @returns {string} HTML content for displaying the top 5 scores.
+ */
 function showScoreBoardHTML() {
     return /*html*/`
     <a href="index.html" class="button btn-back">
@@ -97,6 +121,12 @@ function showScoreBoardHTML() {
 }
 
 
+/**
+ * Generates HTML content for a single row in the leaderboard table.
+ * @param {number} i - The position of the score in the leaderboard (zero-based index).
+ * @param {Object} score - The score object containing coins, time, and chickens.
+ * @returns {string} HTML content for a single row in the leaderboard table.
+ */
 function leaderboardTableHTML(i, score) {
     return /*html*/`
     <td>#${i + 1}</td>

@@ -1,3 +1,7 @@
+/**
+ * Represents a movable object in the game.
+ * @extends DrawableObject
+ */
 class MovableObject extends DrawableObject {
     speed = 0.1;
     otherDirection = false;
@@ -14,6 +18,9 @@ class MovableObject extends DrawableObject {
       }
 
 
+    /**
+     * Applies gravity to the movable object.
+     */
     applyGravity() {
         setInterval(() =>{
             if (this.isAboveGround() || this.speedY > 0) {
@@ -24,6 +31,10 @@ class MovableObject extends DrawableObject {
     }
 
 
+    /**
+     * Checks if the object is above the ground.
+     * @returns {boolean} True if the object is above the ground, otherwise false.
+     */
     isAboveGround() {
         if (this instanceof ThrowableObject) {
             return true;
@@ -43,6 +54,10 @@ class MovableObject extends DrawableObject {
     }
 
 
+    /**
+     * Handles the hit received by the movable object.
+     * @param {number} damage - The amount of damage received.
+     */
     isHit() {
         let timePassed = new Date().getTime() - this.lastHit;
         timePassed = timePassed / 1000;
@@ -50,22 +65,35 @@ class MovableObject extends DrawableObject {
     }
 
 
+    /**
+     * Checks if the movable object is dead.
+     * @returns {boolean} True if the object is dead, otherwise false.
+     */
     isDead() {
         return this.energy === 0;
         
     }
 
-        
+
+    /**
+     * Moves the object to the left.
+     */
     moveLeft() {
         this.x -= this.speed;
     }
 
-
+    /**
+     * Moves the object to the right.
+     */
     moveRight() {
         this.x += this.speed;
     }
 
 
+    /**
+     * Plays the animation of the movable object.
+     * @param {string[]} images - The array of image paths for animation.
+     */
     playAnimation(images) {
         let i = this.currentImage % images.length;
         let path = images[i];
@@ -74,18 +102,29 @@ class MovableObject extends DrawableObject {
     }
 
 
+    /**
+     * Makes the object jump.
+     * @returns {number} The vertical speed after jumping.
+     */
     jump() {
         return this.speedY = 30
     }
 
     
+    /**
+     * Checks if the character animation is starting.
+     * @returns {boolean} True if the character animation is starting, otherwise false.
+     */
     characterStartAnimation() {
         return this.x === 0
     }
 
 
-
-
+    /**
+     * Checks if a object is colliding with another object.
+     * @param {MovableObject} mo - The other movable object.
+     * @returns {boolean} True if the objects are colliding, otherwise false.
+     */
     isColliding(mo) {
         return (
           this.x + this.width - this.offset.right > mo.x + mo.offset.left &&
@@ -96,11 +135,13 @@ class MovableObject extends DrawableObject {
       }
 
 
+    /**
+     * Marks the enemy as dead.
+     */
     markDeadEnemy() {
         this.speed = 0;
         this.isKilled = true;
     }
-
 }
 
 
