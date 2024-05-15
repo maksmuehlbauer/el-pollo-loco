@@ -127,6 +127,8 @@ h2 {
 #movement-box {
     margin-top: 16px;
     color: white;
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 8px;
 }
 
 h3 {

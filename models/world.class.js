@@ -10,6 +10,7 @@ class World {
     playTime = new TimeMeasurement();
     coolDownClock = new CoolDownClock()
     level = createLevel();
+    subWorld = new SubWorld();
     canvas;
     ctx;
     keyboard;
@@ -19,8 +20,7 @@ class World {
     defaultEnemyLength = this.level.enemies.length;
     killedChickens = 0;
     scores = [];
-    
-        
+            
     
     /**
      * Constructs a new World.
@@ -46,11 +46,11 @@ class World {
     /**
      * Stops all intervals.
      */
-    stopAllIntervals() {
-        for (let i = 1; i < 9999; i++) {
-            window.clearInterval(i)
-        } 
-    }
+    // stopAllIntervals() {
+    //     for (let i = 1; i < 9999; i++) {
+    //         window.clearInterval(i)
+    //     } 
+    // }
 
     
     /**
@@ -67,22 +67,8 @@ class World {
     run() {
         setInterval(() => {
             this.checkThrowObjects();
-            this.removeThrownBottleFromMap();
             this.checkChickenCount()
         }, 1000 / 60) 
-    }
-
-
-    /**
-     * Checks for collisions in the game.
-     */
-    checkCollisions() {
-        setInterval(() => {
-            this.collisionEnemies();
-            this.collisionBottleObject();
-            this.collisionCoinObject();
-            this.collisionBottleWithEnemies();
-        }, 1000 / 30);
     }
 
 
@@ -94,9 +80,55 @@ class World {
                 this.statusBarBottle.setPercentage(this.statusBarBottle.percentage -= 20);
                 let bottle = new ThrowableObject(this.character.x, this.character.y);
                 this.throwableObject.push(bottle);
-                this.removeThrownBottleFromMap(bottle);
+                this.subWorld.removeThrownBottleFromMap(bottle, this.throwableObject);
                 this.lastThrowTime = new Date().getTime();
             }
+        }
+
+  
+    /**
+     * Removes a thrown bottle from the map after a delay.
+     * @param {ThrowableObject} bottle - The bottle to remove.
+     */
+    // removeThrownBottleFromMap(bottle) {
+    //     const index = this.throwableObject.indexOf(bottle);
+    //     if (index !== -1) {
+    //         setTimeout(() => {
+    //             this.throwableObject.splice(index, 1)
+    //         }, 1500);
+    //     }
+    // }
+
+
+    /**
+     * Checks for collisions in the game.
+     */
+        checkCollisions() {
+            setInterval(() => {
+                this.collisionEnemies();
+                this.collisionBottleObject();
+                this.collisionCoinObject();
+                this.collisionBottleWithEnemies();
+            }, 1000 / 30);
+        }
+    
+
+    /**
+     * Checks for collisions between throwable objects and enemies.
+     */
+        collisionBottleWithEnemies() {
+            this.level.enemies.forEach((enemy, enemyIndex) => {
+                this.throwableObject.forEach((bottle) => {
+                    if (bottle.isColliding(enemy)) {
+                        bottle.speedX = 0;
+                        this.calculateEnemyDamage(enemy);
+                        if (enemy.isDead()) {
+                            enemy.markDeadEnemy();
+                            this.removeDeadObjectFromWorld(enemy);
+                        }
+                    }
+                });
+            });
         }
 
 
@@ -104,13 +136,13 @@ class World {
      * Handles collisions between the player and enemies.
      */
     collisionEnemies() {
-        this.level.enemies.forEach((enemy, enemyIndex) => {
+        this.level.enemies.forEach((enemy) => {
             if (this.character.isColliding(enemy)) {
-                if (this.character.isAboveGround() && enemy !== this.findEndboss()) {
+                if (this.character.isAboveGround() && enemy !== this.level.findEndboss()) {
                     enemy.hit(20)
-                    if (this.enemyDies(enemyIndex)) {
+                    if (enemy.isDead()) {
                         enemy.markDeadEnemy();
-                        this.removeDeadObjectFromWorld(enemyIndex);
+                        this.removeDeadObjectFromWorld(enemy);
                     }
                 } else if (!this.character.isAboveGround() && !enemy.isDead()) {
                     this.character.hit(2)
@@ -120,36 +152,31 @@ class World {
         });
     }
 
+
+    /**
+     * Handles collisions between the character and collectable bottles.
+     */
+    collisionBottleObject() {
+        this.level.collectableBottles.forEach((collectObject, bottleIndex) => {
+            if (this.statusBarBottle.bottlesFull() && this.character.isColliding(collectObject)) { 
+                    this.statusBarBottle.setPercentage(this.statusBarBottle.percentage += 20)
+                    this.level.collectableBottles.splice(bottleIndex, 1)
+                    this.worldSounds.playCollectBottleSound();
+            }
+        });
+    }
+    
     
     /**
-     * Removes a thrown bottle from the map after a delay.
-     * @param {ThrowableObject} bottle - The bottle to remove.
+     * Handles collisions between the character and collectable coins.
      */
-    removeThrownBottleFromMap(bottle) {
-        const index = this.throwableObject.indexOf(bottle);
-        if (index !== -1) {
-            setTimeout(() => {
-                this.throwableObject.splice(index, 1)
-            }, 1500);
-        }
-    }
-
-
-    /**
-     * Checks for collisions between throwable objects and enemies.
-     */
-    collisionBottleWithEnemies() {
-        this.level.enemies.forEach((enemy, enemyIndex) => {
-            this.throwableObject.forEach((bottle, bottleIndex) => {
-                if (bottle.isColliding(enemy)) {
-                    bottle.speedX = 0;
-                    this.calculateEnemyDamage(enemy, enemyIndex);
-                    if (this.enemyDies(enemyIndex)) {
-                        enemy.markDeadEnemy();
-                        this.removeDeadObjectFromWorld(enemyIndex);
-                    }
-                }
-            });
+    collisionCoinObject() {
+        this.level.collectableCoins.forEach((collectObject, coinIndex) => {
+            if (this.character.isColliding(collectObject)) {
+                this.collectedCoins++;
+                this.level.collectableCoins.splice(coinIndex, 1);
+                this.worldSounds.playCollectCoinSound();
+            }
         });
     }
 
@@ -159,8 +186,8 @@ class World {
      * @param {Enemy} enemy - The enemy object.
      * @param {number} enemyIndex - The index of the enemy in the enemies array.
      */
-    calculateEnemyDamage(enemy, enemyIndex) {
-        if (this.findEndboss() !== undefined && this.level.enemies[enemyIndex] === this.findEndboss()) {
+    calculateEnemyDamage(enemy) {
+        if (enemy === this.level.findEndboss()) {
             enemy.hit(1);
         } else if (enemy.energy <= 20){
             enemy.hit(20);
@@ -181,8 +208,8 @@ class World {
      * Removes dead enemies from the world.
      * @param {number} enemyIndex - The index of the enemy to remove.
      */
-    removeDeadObjectFromWorld(enemyIndex) {
-        if (this.findEndboss() !== undefined && this.level.enemies[enemyIndex] === this.findEndboss()) {
+    removeDeadObjectFromWorld(enemy) {
+        if (enemy === this.level.findEndboss()) {
             setTimeout(() => {
                 this.level.enemies = this.level.enemies.filter(enemy => !enemy.isKilled);
             }, 3000);
@@ -199,62 +226,33 @@ class World {
      * @param {number} enemyIndex - The index of the enemy to check.
      * @returns {boolean} - True if the enemy is dead, otherwise false.
      */
-    enemyDies(enemyIndex) {
-        return this.level.enemies[enemyIndex].energy <= 0
-    }
+    // enemyDies(enemyIndex) {
+    //     return this.level.enemies[enemyIndex].energy <= 0
+    // }
 
 
     /**
      * Checks if throwable objects are present in the world.
      * @returns {boolean} - True if there are throwable objects, otherwise false.
      */
-    bottleInArray() {
-        return this.throwableObject.length > 0
-    }
-  
-        
-    /**
-     * Handles collisions between the character and collectable bottles.
-     */
-    collisionBottleObject() {
-        this.level.collectableBottles.forEach((collectObject) => {
-            if (this.statusBarBottle.bottlesFull() && this.character.isColliding(collectObject)) { 
-                    this.statusBarBottle.setPercentage(this.statusBarBottle.percentage += 20)
-                    let collectableObjectIndex = this.level.collectableBottles.indexOf(collectObject)
-                    this.level.collectableBottles.splice(collectableObjectIndex, 1)
-                    this.worldSounds.playCollectBottleSound();
-            }
-        });
-    }
-
-
-    /**
-     * Handles collisions between the character and collectable coins.
-     */
-    collisionCoinObject() {
-        this.level.collectableCoins.forEach((collectObject, index) => {
-            if (this.character.isColliding(collectObject)) {
-                this.collectedCoins++;
-                this.level.collectableCoins.splice(index, 1);
-                this.worldSounds.playCollectCoinSound();
-            }
-        });
-    }
-
+    // bottleInArray() {
+    //     return this.throwableObject.length > 0
+    // }
+       
 
     /**
      * Handles the victory condition of the game.
      */
     victory() {
         let victoryInterval = setInterval(() => {
-            if (this.findEndboss().isDead()) {
-                this.victoryScreen();
+            if (this.level.findEndboss().isDead()) {
+                this.subWorld.victoryScreen(this.killedChickens, this.collectedCoins, this.calculateElapsedTime());
                 this.pushScores();
                 this.saveScores();
                 this.worldSounds.pauseBackgroundSound()
                 clearInterval(victoryInterval);
                 setTimeout(() => {
-                    this.stopAllIntervals();
+                    this.subWorld.stopAllIntervals();
                 }, 3000);
             }
         }, 200);
@@ -264,10 +262,38 @@ class World {
     /**
      * Displays the victory screen.
      */
-    victoryScreen() {
-        document.getElementById('btn-box').innerHTML = window.victoryScreenHTML();
-        document.getElementById('game-overlay').classList.add('victory-overlay');
-        document.getElementById('game-overlay').innerHTML += window.showScoresBoxHTML(this.killedChickens, this.collectedCoins, this.calculateElapsedTime());
+        // victoryScreen() {
+        //     document.getElementById('btn-box').innerHTML = window.victoryScreenHTML();
+        //     document.getElementById('game-overlay').classList.add('victory-overlay');
+        //     document.getElementById('game-overlay').innerHTML += window.showScoresBoxHTML(this.killedChickens, this.collectedCoins, this.calculateElapsedTime());
+        // }
+    
+
+
+
+    /**
+     * Displays the game over screen.
+     */
+    // showGameOverScreen() {
+    //     document.getElementById('btn-box').innerHTML = window.showGameOverScreenHTML();
+    //     document.getElementById('game-overlay').classList.add('game-over-overlay');
+    //     document.getElementById('game-overlay').innerHTML += window.showScoresBoxHTML(this.killedChickens, this.collectedCoins, this.calculateElapsedTime());
+    //     document.getElementById('status-txt').innerHTML = `Game Over`;
+    //     document.getElementById('movement-box').classList.add('d-none');
+    // }
+        
+    
+    /**
+     * Handles the game over condition of the game.
+     */
+    gameOver() {
+        setInterval(() => {
+            if (this.character.isDead()) {
+                this.subWorld.showGameOverScreen(this.killedChickens, this.collectedCoins, this.calculateElapsedTime());
+                this.worldSounds.pauseBackgroundSound()
+                this.subWorld.stopAllIntervals();
+            }
+        }, 200);
     }
 
     
@@ -275,10 +301,10 @@ class World {
      * Finds the end boss enemy in enemy array.
      * @returns {Enemy} - The end boss enemy object if found, otherwise undefined.
      */
-    findEndboss() {
-        let endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
-        return endboss;
-    }
+    // findEndboss() {
+    //     let endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
+    //     return endboss;
+    // }
 
 
     /**
@@ -290,35 +316,6 @@ class World {
             "coins" : this.collectedCoins,
             "time" : this.calculateElapsedTime()
         });
-    }
-
-
-    /**
-     * Displays the game over screen.
-     */
-    showGameOverScreen() {
-        document.getElementById('btn-box').innerHTML = window.showGameOverScreenHTML();
-        document.getElementById('game-overlay').classList.add('game-over-overlay');
-        document.getElementById('game-overlay').innerHTML += window.showScoresBoxHTML(this.killedChickens, this.collectedCoins, this.calculateElapsedTime());
-        document.getElementById('status-txt').innerHTML = `Game Over`;
-        document.getElementById('movement-box').classList.add('d-none');
-    }
-    
-
-    /**
-     * Handles the game over condition of the game.
-     */
-    gameOver() {
-        let gameOverInterval = setInterval(() => {
-            if (this.character.isDead()) {
-                this.showGameOverScreen();
-                this.worldSounds.pauseBackgroundSound()
-                clearInterval(gameOverInterval);
-                setTimeout(() => {
-                    this.stopAllIntervals();
-                }, 1500);
-            }
-        }, 200);
     }
 
 
@@ -366,7 +363,7 @@ class World {
      */
     drawHud() {
         if (!this.character.isDead()) {
-            let endboss = this.findEndboss();
+            let endboss = this.level.findEndboss();
             if (endboss && endboss.energy > 0) {
                 this.addToMap(this.statusBarHp);
                 this.addToMap(this.coinCount);

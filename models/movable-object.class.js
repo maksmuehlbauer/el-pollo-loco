@@ -7,7 +7,7 @@ class MovableObject extends DrawableObject {
     otherDirection = false;
     speedY = 0;
     acceleration = 2.5;
-    energy = 100000;
+    energy = 10000;
     lastHit = 0;
     throwSpeed = 20;
     offset = {
@@ -70,7 +70,7 @@ class MovableObject extends DrawableObject {
      * @returns {boolean} True if the object is dead, otherwise false.
      */
     isDead() {
-        return this.energy === 0;
+        return this.energy <= 0;
         
     }
 
@@ -142,6 +142,8 @@ class MovableObject extends DrawableObject {
         this.speed = 0;
         this.isKilled = true;
     }
+
+
 }
 
 

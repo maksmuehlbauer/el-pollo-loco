@@ -8,7 +8,7 @@ class Level {
     collectableBottles;
     collectableCoins;
     level_end_x = 5100;
-    numberOfEnemies = 14;
+    numberOfEnemies = 20;
     numberOfBackgrounds = 7;
     numberOfBottles = 8;
     numberOfClouds = 10;
@@ -38,6 +38,16 @@ class Level {
         this.fillWorldWithCoins();
         this.addNewObjectsToMap();
     }  
+
+
+    /**
+     * Finds the end boss enemy in enemy array.
+     * @returns {Enemy} - The end boss enemy object if found, otherwise undefined.
+     */
+    findEndboss() {
+        let endboss = this.enemies.find(enemy => enemy instanceof Endboss);
+        return endboss;
+    }
 
 
     /**

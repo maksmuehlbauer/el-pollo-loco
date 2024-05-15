@@ -161,10 +161,8 @@ function isMobileDevice() {
 function updateMobileOrientation() {
   if (window.orientation === 0) {
     document.getElementById('mobile-info').classList.remove('d-none')
-    console.log("portrait");
   } else if (window.orientation === 90 || window.orientation === -90) {
     document.getElementById('mobile-info').classList.add('d-none')
-    console.log("landscape");
   } 
 }
 

@@ -79,17 +79,18 @@ function helpFaqHTML() {
     </a>
     <div id="rules">
         <h2>Rules:</h2>
-        <p>1. Defeat the final boss to get a place on the scoreboard</p>
+        <p>1. Defeat the final boss to get a place on the scoreboard.</p>
         <p>2. if your energy bar drops to zero, you lose.</p>
-        <p>3. Loosing dont save scores</p>
-        <p>4. measured values = Coins > Time > defeated Chickens</p>
-        <p>5. Check your stats at the leaderboard</p>
+        <p>3. Loosing dont save scores.</p>
+        <p>4. measured values = Coins > Time > defeated Chickens.</p>
+        <p>5. Check your stats at the leaderboard.</p>
 
         <h2>Game Mechanics:</h2>
         <p>1. You can throw one bottle every 1.5/sek (look at => <img class="rules-cd-img" src="img/10_interactions/sandclock.png">)</p>
         <p>2. You can hold 5 bottles max.</p>
-        <p>3. Normal and small Chickens are one shot, Boss have more energy</p>
-        <p>4. From time to time there spawn new bottles</p>
+        <p>3. Throw bottles or jump on enemys to defeat them.</p>
+        <p>4. The final boss only takes damage from bottles.</p>
+        <p>5. From time to time there spawn new bottles.</p>
     </div>
 `
 }

@@ -3,7 +3,7 @@
  * @extends MovableObject
  */
 class Character extends MovableObject{
-    x = 0;
+    x = 4200;
     y = 0;
     width = 150;
     height = 300

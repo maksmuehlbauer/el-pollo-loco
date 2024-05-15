@@ -96,3 +96,13 @@
     //         this.x + this.offset.left < mo.x + mo.width - mo.offset.right
     //     );
     // }
+
+
+        // removeThrownBottleFromMap(bottle) {
+    //     const index = this.throwableObject.indexOf(bottle);
+    //     if (index !== -1) {
+    //         setTimeout(() => {
+    //             this.throwableObject.splice(index, 1)
+    //         }, 1500);
+    //     }
+    // }
