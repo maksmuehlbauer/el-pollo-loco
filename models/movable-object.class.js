@@ -7,7 +7,7 @@ class MovableObject extends DrawableObject {
     otherDirection = false;
     speedY = 0;
     acceleration = 2.5;
-    energy = 10000;
+    energy = 100000;
     lastHit = 0;
     throwSpeed = 20;
     offset = {
@@ -26,6 +26,7 @@ class MovableObject extends DrawableObject {
             if (this.isAboveGround() || this.speedY > 0) {
                 this.y -= this.speedY;
                 this.speedY -= this.acceleration;
+
             }
         }, 1000 / 30)
     }
@@ -39,8 +40,13 @@ class MovableObject extends DrawableObject {
         if (this instanceof ThrowableObject) {
             return true;
         } else {
-            return this.y < 150;
+            
+            return this.y < 165;
         }
+    }
+
+    isFalling() {
+        return this.speedY < 0 && this.isAboveGround();
     }
 
 
@@ -99,6 +105,8 @@ class MovableObject extends DrawableObject {
         let path = images[i];
         this.img = this.imageCache[path]
         this.currentImage++;
+
+        
     }
 
 

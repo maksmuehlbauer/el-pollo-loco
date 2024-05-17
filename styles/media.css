@@ -213,9 +213,9 @@
 }
 
 @media only screen and (max-height: 820px) {
-    #canvas-box {
+    /* #canvas-box {
         height: 100vh;
-    }
+    } */
 
     canvas {
         height: 100%;

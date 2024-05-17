@@ -10,7 +10,7 @@ class Endboss extends MovableObject {
     closeRangeToBoss = 100;
     farRangeToBoss = 400;
     offset = {
-        left: 10,
+        left: 20,
         right: 5,
         bottom: 15,
         top: 60,
@@ -77,24 +77,44 @@ class Endboss extends MovableObject {
      */
     animate() {
         setInterval(() => {
-            if (this.startBossFight()) {
-                this.bossStartSequence();
-            } else if (this.startingPosition()) {
-                this.playAnimation(this.IMAGES_ALERT);
-            } else if (this.distanceCharToBoss() < this.closeRangeToBoss) {
-                this.closeToBossAttackSequence()
-            } else if (this.distanceCharToBoss() < this.farRangeToBoss) {
-                this.farFromBossAttackSequence();
-            }  else {
-                this.defaultlWalkLeftSequence();
-            }          
-            if (this.isDead()) {
-                this.bossIsDeadSequence();
-            }
-            if (this.isHit()) {
-                this.bossGetDamageSequence();
-            } 
+            this.endbossAnimationLogic()
+            this.endbossIsDead();
+            this.endbossIsHit();
         }, 125)
+    }
+
+
+    endbossAnimationLogic() {
+        if (this.startBossFight()) {
+            this.bossStartSequence();
+        } else if (this.startingPosition()) {
+            this.playAnimation(this.IMAGES_ALERT);
+        } else if (this.distanceCharToBoss() < this.closeRangeToBoss) {
+            this.closeToBossAttackSequence()
+        } else if (this.distanceCharToBoss() < this.farRangeToBoss) {
+            this.farFromBossAttackSequence();
+        }  else {
+            this.defaultlWalkLeftSequence();
+        } 
+    }
+
+    /**
+     * Checks if the end boss is dead and triggers the dead sequence if true.
+     */
+    endbossIsDead() {
+        if (this.isDead()) {
+            this.bossIsDeadSequence();
+        }
+    }
+
+
+    /**
+     * Checks if the end boss is hit and triggers the damage sequence if true.
+     */
+    endbossIsHit() {
+        if (this.isHit()) {
+            this.bossGetDamageSequence();
+        } 
     }
 
 

@@ -42,16 +42,6 @@ class World {
         this.bottleCoolDown = 0;
     }
 
-
-    /**
-     * Stops all intervals.
-     */
-    // stopAllIntervals() {
-    //     for (let i = 1; i < 9999; i++) {
-    //         window.clearInterval(i)
-    //     } 
-    // }
-
     
     /**
      * Sets the world for the character.
@@ -86,20 +76,6 @@ class World {
         }
 
   
-    /**
-     * Removes a thrown bottle from the map after a delay.
-     * @param {ThrowableObject} bottle - The bottle to remove.
-     */
-    // removeThrownBottleFromMap(bottle) {
-    //     const index = this.throwableObject.indexOf(bottle);
-    //     if (index !== -1) {
-    //         setTimeout(() => {
-    //             this.throwableObject.splice(index, 1)
-    //         }, 1500);
-    //     }
-    // }
-
-
     /**
      * Checks for collisions in the game.
      */
@@ -138,8 +114,9 @@ class World {
     collisionEnemies() {
         this.level.enemies.forEach((enemy) => {
             if (this.character.isColliding(enemy)) {
-                if (this.character.isAboveGround() && enemy !== this.level.findEndboss()) {
+                if (this.character.isFalling() && enemy !== this.level.findEndboss()) {
                     enemy.hit(20)
+                    
                     if (enemy.isDead()) {
                         enemy.markDeadEnemy();
                         this.removeDeadObjectFromWorld(enemy);
@@ -219,26 +196,7 @@ class World {
             }, 1000);
         }
     }
-
-
-    /**
-     * Checks if an enemy is dead.
-     * @param {number} enemyIndex - The index of the enemy to check.
-     * @returns {boolean} - True if the enemy is dead, otherwise false.
-     */
-    // enemyDies(enemyIndex) {
-    //     return this.level.enemies[enemyIndex].energy <= 0
-    // }
-
-
-    /**
-     * Checks if throwable objects are present in the world.
-     * @returns {boolean} - True if there are throwable objects, otherwise false.
-     */
-    // bottleInArray() {
-    //     return this.throwableObject.length > 0
-    // }
-       
+      
 
     /**
      * Handles the victory condition of the game.
@@ -258,31 +216,7 @@ class World {
         }, 200);
     }
 
-
-    /**
-     * Displays the victory screen.
-     */
-        // victoryScreen() {
-        //     document.getElementById('btn-box').innerHTML = window.victoryScreenHTML();
-        //     document.getElementById('game-overlay').classList.add('victory-overlay');
-        //     document.getElementById('game-overlay').innerHTML += window.showScoresBoxHTML(this.killedChickens, this.collectedCoins, this.calculateElapsedTime());
-        // }
-    
-
-
-
-    /**
-     * Displays the game over screen.
-     */
-    // showGameOverScreen() {
-    //     document.getElementById('btn-box').innerHTML = window.showGameOverScreenHTML();
-    //     document.getElementById('game-overlay').classList.add('game-over-overlay');
-    //     document.getElementById('game-overlay').innerHTML += window.showScoresBoxHTML(this.killedChickens, this.collectedCoins, this.calculateElapsedTime());
-    //     document.getElementById('status-txt').innerHTML = `Game Over`;
-    //     document.getElementById('movement-box').classList.add('d-none');
-    // }
-        
-    
+   
     /**
      * Handles the game over condition of the game.
      */
@@ -295,16 +229,6 @@ class World {
             }
         }, 200);
     }
-
-    
-    /**
-     * Finds the end boss enemy in enemy array.
-     * @returns {Enemy} - The end boss enemy object if found, otherwise undefined.
-     */
-    // findEndboss() {
-    //     let endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
-    //     return endboss;
-    // }
 
 
     /**

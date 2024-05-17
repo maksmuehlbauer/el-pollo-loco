@@ -3,8 +3,8 @@
  * @extends MovableObject
  */
 class Character extends MovableObject{
-    x = 4200;
-    y = 0;
+    x = 0;
+    y = 165;
     width = 150;
     height = 300
     speed = 10;
@@ -12,7 +12,7 @@ class Character extends MovableObject{
     longIdleCD = 15;
     offset = {
         left: 20,
-        right: 15,
+        right: 45,
         bottom: 15,
         top: 110,
       }
@@ -106,22 +106,46 @@ class Character extends MovableObject{
     characterMovementAnimations() {
         setInterval(() => {
             this.world.worldSounds.pauseCharacterWalkSound();
-            if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
-                this.moveRight();
-                this.otherDirection = false;
-                this.world.worldSounds.playCharacterWalkSound();
-            }
-            if (this.world.keyboard.LEFT && this.x > 0) {
-                this.moveLeft();
-                this.otherDirection = true;
-                this.world.worldSounds.playCharacterWalkSound();
-            }
-            if (this.world.keyboard.SPACE && !this.isAboveGround()) {
-                this.jump();
-                this.world.worldSounds.playCharacterJumpSound();
-            }
+            this.characterMoveRight();
+            this.characterMoveLeft();
+            this.characterJump();
             this.world.camera_x = -this.x + 100;
         }, 1000 / 60)
+    }
+
+
+    /**
+     * Moves the character to the right if the right arrow key is pressed and the character hasn't reached the end of the level.
+     */
+    characterMoveRight() {
+        if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
+            this.moveRight();
+            this.otherDirection = false;
+            this.world.worldSounds.playCharacterWalkSound();
+        }
+    }
+
+
+    /**
+     * Moves the character to the left if the left arrow key is pressed and the character hasn't reached the beginning of the level.
+     */
+    characterMoveLeft() {
+        if (this.world.keyboard.LEFT && this.x > 0) {
+            this.moveLeft();
+            this.otherDirection = true;
+            this.world.worldSounds.playCharacterWalkSound();
+        }
+    }
+
+
+    /**
+     * Makes the character jump if the space bar is pressed and the character is on the ground.
+     */
+    characterJump() {
+        if (this.world.keyboard.SPACE && !this.isAboveGround()) {
+            this.jump();
+            this.world.worldSounds.playCharacterJumpSound();
+        }
     }
 
 
@@ -131,26 +155,57 @@ class Character extends MovableObject{
     characterStateAnimations() {
         let characterAnimation = setInterval(() => {
             this.world.worldSounds.pauseCharacterSleepingSound();
-
-            if (this.isDead()) {
-                this.playAnimation(this.IMAGES_DEAD)
-                this.world.worldSounds.playGameOverSound();
-                clearInterval(characterAnimation)
-            } else if (this.isHit()){
-                this.playAnimation(this.IMAGES_HURT)
-                this.world.worldSounds.playCharacterHurtSound()
-            } else if (this.longAFK()) {
-                this.playAnimation(this.IMAGES_IDLE_LONG)
-                this.world.worldSounds.playCharacterSleepingSound();
-            } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
-                this.playAnimation(this.IMAGES_WALKING)
-            } else if (this.isAboveGround()) {
-                this.playAnimation(this.IMAGES_JUMPING)
-            } else if (this.shortAFK()) {
-                this.playAnimation(this.IMAGES_IDLE_SHORT)
-            }                 
-        }, 125 )
+            this.characterAnimationLogic();
+        }, 125  )
     }
+
+    /**
+     * Handles the animation logic for the character based on its current state.
+     */
+    characterAnimationLogic() {
+        if (this.isDead()) {
+            this.characterIsDead()
+        } else if (this.isHit()){
+            this.characterIsHit() 
+        } else if (this.longAFK()) {
+            this.characterIsAfk()
+        } else if (this.isAboveGround()) {
+            this.playAnimation(this.IMAGES_JUMPING)
+        } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+            this.playAnimation(this.IMAGES_WALKING)
+        }  else if (this.shortAFK()) {
+            this.playAnimation(this.IMAGES_IDLE_SHORT)
+        }  
+    }
+
+
+    /**
+     * Plays the death animation for the character and plays the game over sound.
+     */
+    characterIsDead() {
+        this.playAnimation(this.IMAGES_DEAD)
+        this.world.worldSounds.playGameOverSound();
+        // clearInterval(characterAnimation)
+    }
+
+
+    /**
+     * Plays the hit animation for the character and plays the hurt sound.
+     */
+    characterIsHit() {
+        this.playAnimation(this.IMAGES_HURT)
+        this.world.worldSounds.playCharacterHurtSound()
+    }
+
+
+    /**
+     * Plays the long AFK animation for the character and plays the sleeping sound.
+     */ 
+    characterIsAfk() {
+        this.playAnimation(this.IMAGES_IDLE_LONG)
+        this.world.worldSounds.playCharacterSleepingSound();
+    }
+
 
     /**
      * Checks if the character has been idle for a short period.

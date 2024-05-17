@@ -4,8 +4,6 @@
 class Keyboard {
     LEFT = false;
     RIGHT = false;
-    DOWN = false;
-    UP = false;
     SPACE = false;
     THROW = false;
     lastKeyboardAction = 6;
@@ -25,39 +23,18 @@ class Keyboard {
      * Sets up touch events for mobile controls.
      */
     mobilePressEvents() {
-        document.getElementById('btn-left').addEventListener('touchstart', (e) => {
-            if (e.cancelable) e.preventDefault();
-            this.LEFT = true;
-        });
+        this.mobileLeftControl();
+        this.mobileRightControl();
+        this.mobileThrowControl();
+        this.mobileJumpControl();
+    }
 
-        document.getElementById('btn-left').addEventListener('touchend', (e) => {
-            if (e.cancelable) e.preventDefault();
-            this.LEFT = false;
-            this.lastKeyboardInput()
-        });
 
-        document.getElementById('btn-right').addEventListener('touchstart', (e) => {
-            if (e.cancelable) e.preventDefault();
-            this.RIGHT = true;
-        });
-
-        document.getElementById('btn-right').addEventListener('touchend', (e) => {
-            if (e.cancelable) e.preventDefault();
-            this.RIGHT = false;
-            this.lastKeyboardInput()
-        });
-
-        document.getElementById('btn-throw').addEventListener('touchstart', (e) => {
-            if (e.cancelable) e.preventDefault();
-            this.THROW = true;
-        });
-
-        document.getElementById('btn-throw').addEventListener('touchend', (e) => {
-            if (e.cancelable) e.preventDefault();
-            this.THROW = false;
-            this.lastKeyboardInput()
-        });
-
+    /**
+     * Sets up mobile control for the jump action.
+     * Adds touchstart and touchend event listeners to the jump button.
+     */
+    mobileJumpControl() {
         document.getElementById('btn-jump').addEventListener('touchstart', (e) => {
             if (e.cancelable) e.preventDefault();
             this.SPACE = true;
@@ -68,7 +45,60 @@ class Keyboard {
             this.SPACE = false;
             this.lastKeyboardInput()
         });
-        
+    }
+
+
+    /**
+     * Sets up mobile control for the throw action.
+     * Adds touchstart and touchend event listeners to the throw button.
+     */
+    mobileThrowControl() {
+        document.getElementById('btn-throw').addEventListener('touchstart', (e) => {
+            if (e.cancelable) e.preventDefault();
+            this.THROW = true;
+        });
+
+        document.getElementById('btn-throw').addEventListener('touchend', (e) => {
+            if (e.cancelable) e.preventDefault();
+            this.THROW = false;
+            this.lastKeyboardInput()
+        });
+    }
+
+
+    /**
+     * Sets up mobile control for moving right.
+     * Adds touchstart and touchend event listeners to the right button.
+     */
+    mobileRightControl() {
+        document.getElementById('btn-right').addEventListener('touchstart', (e) => {
+            if (e.cancelable) e.preventDefault();
+            this.RIGHT = true;
+        });
+
+        document.getElementById('btn-right').addEventListener('touchend', (e) => {
+            if (e.cancelable) e.preventDefault();
+            this.RIGHT = false;
+            this.lastKeyboardInput()
+        });
+    }
+
+
+    /**
+     * Sets up mobile control for moving left.
+     * Adds touchstart and touchend event listeners to the left button.
+     */
+    mobileLeftControl() {
+        document.getElementById('btn-left').addEventListener('touchstart', (e) => {
+            if (e.cancelable) e.preventDefault();
+            this.LEFT = true;
+        });
+
+        document.getElementById('btn-left').addEventListener('touchend', (e) => {
+            if (e.cancelable) e.preventDefault();
+            this.LEFT = false;
+            this.lastKeyboardInput()
+        });
     }
 
 
@@ -76,25 +106,23 @@ class Keyboard {
      * Sets up desktop keyboard events.
      */
     desktopPressEvents() {
+        this.keyDownTrueEvents();
+        this.keyUpFalseEvents();
+    }
+
+    
+    /**
+     * Adds event listeners for keydown events to set the corresponding keyboard controls to true.
+     */
+    keyDownTrueEvents() {
         window.addEventListener("keydown", (event) => {
             this.lastKeyboardInput()
-            // console.log(event)
             if (event.keyCode === 39) {
                 keyboard.RIGHT = true;
             }
-        
             if (event.keyCode === 37) {
                 keyboard.LEFT = true;
             }
-        
-            if (event.keyCode === 38) {
-                keyboard.UP = true;
-            }
-        
-            if (event.keyCode === 40) {
-                keyboard.DOWN = true;
-            }
-        
             if (event.keyCode === 32) {
                 keyboard.SPACE = true;
             }
@@ -102,26 +130,20 @@ class Keyboard {
                 keyboard.THROW = true;
             }
         });
-        
-        
+    }
+
+
+    /**
+     * Adds event listeners for keyup events to set the corresponding keyboard controls to false.
+     */
+    keyUpFalseEvents() {
         window.addEventListener("keyup", (event) => {
-            // console.log(event)
             if (event.keyCode === 39) {
                 keyboard.RIGHT = false;
             }
-        
             if (event.keyCode === 37) {
                 keyboard.LEFT = false;
             }
-        
-            if (event.keyCode === 38) {
-                keyboard.UP = false;
-            }
-        
-            if (event.keyCode === 40) {
-                keyboard.DOWN = false;
-            }
-        
             if (event.keyCode === 32) {
                 keyboard.SPACE = false;
             }

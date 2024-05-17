@@ -33,7 +33,7 @@ h1 {
 
 
 #canvas-box {
-    width: 720px;
+    /* width: 720px; */
     height: 480px;
     position: relative;
 }

@@ -5,6 +5,12 @@
 class BottleObject extends MovableObject {
     width = 100;
     height = 100;
+    offset = {
+        left: 30,
+        right: 25,
+        bottom: 10,
+        top: 20,
+      }
     IMAGES_ANIMATION = [
         'img/6_salsa_bottle/1_salsa_bottle_on_ground.png',
         'img/6_salsa_bottle/2_salsa_bottle_on_ground.png'

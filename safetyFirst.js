@@ -106,3 +106,29 @@
     //         }, 1500);
     //     }
     // }
+
+    
+    // characterStateAnimations() {
+    //     let characterAnimation = setInterval(() => {
+    //         this.world.worldSounds.pauseCharacterSleepingSound();
+
+    //         if (this.isDead()) {
+    //             this.playAnimation(this.IMAGES_DEAD)
+    //             this.world.worldSounds.playGameOverSound();
+    //             clearInterval(characterAnimation)
+    //         } else if (this.isHit()){
+    //             this.playAnimation(this.IMAGES_HURT)
+    //             this.world.worldSounds.playCharacterHurtSound()
+    //         } else if (this.longAFK()) {
+    //             this.playAnimation(this.IMAGES_IDLE_LONG)
+    //             this.world.worldSounds.playCharacterSleepingSound();
+    //         } else if (this.isAboveGround()) {
+    //             this.playAnimation(this.IMAGES_JUMPING)
+                
+    //         } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+    //             this.playAnimation(this.IMAGES_WALKING)
+    //         }  else if (this.shortAFK()) {
+    //             this.playAnimation(this.IMAGES_IDLE_SHORT)
+    //         }                 
+    //     }, 125  )
+    // }
