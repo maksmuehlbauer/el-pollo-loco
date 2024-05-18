@@ -3,7 +3,7 @@
  * @extends MovableObject
  */
 class ThrowableObject extends MovableObject {
-    worldSounds = new WorldSounds();
+    // worldSounds = new WorldSounds();
     IMAGES_BOTTLE_SPLASH = [
         'img/6_salsa_bottle/bottle_rotation/bottle_splash/1_bottle_splash.png',
         'img/6_salsa_bottle/bottle_rotation/bottle_splash/2_bottle_splash.png',
@@ -33,7 +33,6 @@ class ThrowableObject extends MovableObject {
         this.animate();
         this.applyGravity();
         this.bottleFly();
-        this.worldSounds.playThrowSound()
         this.x = x;
         this.y = y;
         this.width = 70;
@@ -55,7 +54,6 @@ class ThrowableObject extends MovableObject {
                 this.speedY = 0;
                 this.acceleration = 0;
                 this.playAnimation(this.IMAGES_BOTTLE_SPLASH);
-                this.worldSounds.playBreakBottleSound()
                 setTimeout(() => {
                     clearInterval(bottleAnimation)
                 }, 1000);

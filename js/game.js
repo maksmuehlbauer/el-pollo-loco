@@ -3,15 +3,38 @@ let world;
 let keyboard = new Keyboard();
 let worldSounds = new WorldSounds();
 let scores = [];
+let soundToggle = true;
 loadScores();
 
+
+/**
+ * mute or unmute all sounds
+ */
+function muteAllSounds() {
+  world.worldSounds.toggleMute()
+  world.worldSoundMuted();
+  toggleSoundImages();
+}
+
+/**
+ * toggle sound Images on or off
+ */
+function toggleSoundImages() {
+  if (soundToggle) {
+    document.getElementById('mute').src = './img/10_interactions/sound-on.png'
+    soundToggle = false;
+  } else {
+    document.getElementById('mute').src = './img/10_interactions/sound-off.png'
+    soundToggle = true;
+  }  
+}
 
 /**
  * Initializes the canvas element.
  */
 function init() {
     canvas = document.getElementById('canvas');
-    startGame();
+    // startGame();
 }
 
 
@@ -27,10 +50,27 @@ function retryLevel(id) {
 
 
 /**
- * Redirects to the main menu page.
+ * Displays the main menu by modifying the game overlay and updating UI elements.
+ * @param {string} id - The ID of the class to be removed from the game overlay.
  */
-function MainMenu() {
-    window.location.href = 'index.html';    
+function showMainMenu(id) {
+  document.getElementById('game-overlay').style.display = "flex";
+  document.getElementById('game-overlay').classList.remove(id)
+  document.getElementById('show-scores-box').remove()
+  document.getElementById('btn-box').innerHTML = mainMenuButtons();
+}
+
+
+/**
+ * Handles the back button functionality to display the main menu and update UI elements.
+ */
+function backButton() {
+  let gameOverlay = document.getElementById('game-overlay');
+  gameOverlay.style.display = "flex";
+  gameOverlay.innerHTML += createButtonBox();
+  document.getElementById('rules').remove()
+  document.getElementById('btn-box').innerHTML = mainMenuButtons();
+  document.getElementById('back-button').classList.add('d-none')
 }
 
 
@@ -74,13 +114,28 @@ function helpFaq() {
  * Displays the top five scores on the game overlay.
  */
 function showScoreBoard() {
-    sortScores();
-    let topFiveScores = scores.slice(0, 5);
     document.getElementById('game-overlay').innerHTML = showScoreBoardHTML(); 
     let scoreTable = document.getElementById('score-table');
-    topFiveScores.forEach((score, i) => {
-        scoreTable.innerHTML += leaderboardTableHTML(i, score);
-    });
+    let noScoreInfo = document.getElementById('rules');
+    if (!checkLocalStorage()) {
+      noScoreInfo.innerHTML += noScoresYet();
+    }
+    if (checkLocalStorage()) {
+      sortScores();
+      let topFiveScores = scores.slice(0, 5);
+      topFiveScores.forEach((score, i) => {
+          scoreTable.innerHTML += leaderboardTableHTML(i, score);
+      });
+    }
+}
+
+
+/**
+ * Checks if there is a "Scores" item in the local storage and returns its value.
+ * @returns {string|null} The value of the "Scores" item in local storage, or null if it does not exist.
+ */
+function checkLocalStorage() {
+  return localStorage.getItem("Scores")
 }
 
 

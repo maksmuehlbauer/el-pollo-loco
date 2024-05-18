@@ -24,14 +24,15 @@
     <script src="models/play-time.class.js"></script>
     <script src="models/cooldown-icon.class.js"></script>
     <script src="models/world-sub-functions.class.js"></script>
+    
     <script src="models/world.class.js"></script>
-
+    <script src="models/world-sound.class.js"></script>
     <script src="models/clouds.class.js"></script>
     <script src="models/background-objects.class.js"></script>
     <script src="models/endboss.class.js"></script>
     <script src="models/level.class.js"></script>
     <script src="levels/level1.js"></script>
-    <script src="models/world-sound.class.js"></script>
+    
     
 
 </head>
@@ -42,7 +43,8 @@
     </div>
     <h1 class="main-title">El Pollo Loco</h1>
         <div id="canvas-box">
-            <img src="img/10_interactions/fullscreen.png" id="fullscreen" onclick="fullscreen()"></button>
+            <img src="img/10_interactions/fullscreen.png" id="fullscreen" onclick="fullscreen()">
+            <img src="img/10_interactions/sound-off.png" id="mute" onclick="muteAllSounds()">
             <div id="game-overlay">
                 <div id="btn-box">
                     <a href="#" class="button" onclick="showScoreBoard()">
@@ -87,6 +89,7 @@
         <script src="js/html-functions.js"></script>
         <script src="models/keyboard.class.js"></script>
         <script src="js/game.js"></script>
+        
 </body>
 
 </html>

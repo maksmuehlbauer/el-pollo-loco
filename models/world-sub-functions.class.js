@@ -42,7 +42,4 @@ class SubWorld {
                 }, 1500);
             }
         }
-
-
-
 }

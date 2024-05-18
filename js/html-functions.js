@@ -7,7 +7,7 @@ window.showGameOverScreenHTML = function () {
     <a href="#" class="button btn-animation-over" onclick="retryLevel('game-over-overlay')">
         <img src="img/10_interactions/retry.png" class="img-btn">
     </a>
-    <a href="index.html" class="button btn-animation-over">
+    <a href="#" class="button btn-animation-over" onclick="showMainMenu('game-over-overlay')">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" width="30" height="30">
             <line x1="0" y1="5" x2="30" y2="5" stroke="black" stroke-width="2"/>
             <line x1="0" y1="15" x2="30" y2="15" stroke="black" stroke-width="2"/>
@@ -55,7 +55,7 @@ window.victoryScreenHTML = function() {
     <a href="#" class="button btn-animation-victory" onclick="retryLevel('victory-overlay')">
         <img src="img/10_interactions/retry.png" class="img-btn">
     </a>
-    <a href="index.html" class="button btn-animation-victory">
+    <a href="#" class="button btn-animation-victory" onclick="showMainMenu('victory-overlay')">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" width="30" height="30">
             <line x1="0" y1="5" x2="30" y2="5" stroke="black" stroke-width="2"/>
             <line x1="0" y1="15" x2="30" y2="15" stroke="black" stroke-width="2"/>
@@ -72,7 +72,7 @@ window.victoryScreenHTML = function() {
  */
 function helpFaqHTML() {
     return /*html*/`
-    <a href="index.html" class="button btn-back">
+    <a href="#" id="back-button" class="button btn-back" onclick="backButton()">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
            <polygon points="70,20 70,80 20,50" fill="currentColor"/>
         </svg>
@@ -102,7 +102,7 @@ function helpFaqHTML() {
  */
 function showScoreBoardHTML() {
     return /*html*/`
-    <a href="index.html" class="button btn-back">
+    <a href="#" id="back-button" class="button btn-back" onclick="backButton()">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
            <polygon points="70,20 70,80 20,50" fill="currentColor"/>
         </svg>
@@ -134,5 +134,52 @@ function leaderboardTableHTML(i, score) {
     <td>${score.coins} </td>
     <td>${score.time} s</td>
     <td>${score.chickens}</td>
+    `
+}
+
+/**
+ * Returns the HTML string for a message indicating no high scores yet.
+ * @returns {string} The HTML string for the "no scores yet" message.
+ */
+function noScoresYet() {
+    return  /*html*/ `
+    <div class="no-score">
+        <h2>you didn't reach a high score yet</h2>
+    </div>
+    `
+}
+
+
+/**
+ * Returns the HTML string for the main menu buttons.
+ * @returns {string} The HTML string for the main menu buttons.
+ */
+function mainMenuButtons() {
+    return /*html*/`
+        <a href="#" class="button" onclick="showScoreBoard()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="80" height="80">
+                <!-- Kreis für die Medaille -->
+                <circle cx="50" cy="50" r="30" fill="none" stroke="black" stroke-width="3"/>
+                <!-- Nummer im Kreis -->
+                <text x="50" y="60" text-anchor="middle" font-family="Arial, sans-serif" font-size="32" font-weight="bold" fill="black">#1</text>
+            </svg>
+        </a>
+        <a href="#" class="button" onclick="helpFaq()">?</a>
+        <a href="#" class="button" onclick="startGame()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+                <polygon points="30,20 30,80 80,50" fill="currentColor"/>
+            </svg>
+        </a>
+    `
+}
+
+
+/**
+ * Returns the HTML string for the button box container.
+ * @returns {string} The HTML string for the button box container.
+ */
+function createButtonBox() {
+    return /*html*/ `
+        <div id="btn-box"></div>
     `
 }

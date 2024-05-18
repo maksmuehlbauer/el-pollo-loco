@@ -3,7 +3,7 @@
  * @extends MovableObject
  */
 class Endboss extends MovableObject {
-    worldSounds = new WorldSounds()
+    
     y = 125;
     width = 225;
     height = 350;
@@ -66,9 +66,15 @@ class Endboss extends MovableObject {
         this.loadImages(this.IMAGES_DEAD)
         this.loadImages(this.IMAGES_HURT)
         this.x = 5100;
-        this.energy = 20;
+        this.energy = 100;
         this.speed = 10
         this.animate();
+        this.worldSounds = new WorldSounds();
+    }
+
+
+    muteAllEndbossSounds() {
+        this.worldSounds.muteEndbossSounds()
     }
 
 

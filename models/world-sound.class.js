@@ -2,20 +2,89 @@
  * Represents the sounds of the game world.
  */
 class WorldSounds {
-    collectCoin_sound = new Audio('audio/collect-coin1.mp3');
-    collectBottle_sound = new Audio('audio/collect-bottle2.mp3');
-    background_music = new Audio('audio/background-music2.mp3');
-    hurt_sound = new Audio('audio/hurt.mp3');
-    sleeping_sound = new Audio('audio/snoring.mp3');
-    gameOver_sound = new Audio('audio/game-over2.mp3');
-    jumping_sound = new Audio('audio/jump.mp3');
-    walking_sound = new Audio('audio/walk.mp3');
-    breakingBottle_sound = new Audio('audio/break-bottle.mp3')
-    throw_sound = new Audio('audio/throw.mp3');
-    endbossDie_sound = new Audio('audio/victory.mp3')
-    endbossHurt_sound = new Audio('audio/endboss-hurt.mp3')
-    endbossStart_sound = new Audio('audio/enboss-starts.mp3')
-    sound_chickenDead = new Audio('audio/chicken-dead.mp3');
+    endbossMuted = true
+
+    constructor() {
+        this.collectCoin_sound = new Audio('audio/collect-coin1.mp3');
+        this.collectBottle_sound = new Audio('audio/collect-bottle2.mp3');
+        this.background_music = new Audio('audio/background-music2.mp3');
+        this.hurt_sound = new Audio('audio/hurt.mp3');
+        this.sleeping_sound = new Audio('audio/snoring.mp3');
+        this.gameOver_sound = new Audio('audio/game-over2.mp3');
+        this.jumping_sound = new Audio('audio/jump.mp3');
+        this.walking_sound = new Audio('audio/walk.mp3');
+        this.breakingBottle_sound = new Audio('audio/break-bottle.mp3');
+        this.throw_sound = new Audio('audio/throw.mp3');
+        this.endbossDie_sound = new Audio('audio/victory.mp3');
+        this.endbossHurt_sound = new Audio('audio/endboss-hurt.mp3');
+        this.endbossStart_sound = new Audio('audio/enboss-starts.mp3');
+        this.sound_chickenDead = new Audio('audio/chicken-dead.mp3');
+
+        this.sounds = [
+            this.collectCoin_sound,
+            this.collectBottle_sound,
+            this.background_music,
+            this.hurt_sound,
+            this.sleeping_sound,
+            this.gameOver_sound,
+            this.jumping_sound,
+            this.walking_sound,
+            this.breakingBottle_sound,
+            this.throw_sound,
+            this.endbossDie_sound,
+            this.endbossHurt_sound,
+            this.endbossStart_sound,
+            this.sound_chickenDead
+        ];
+    }
+
+
+    /**
+     * Toggles the mute state for all endboss-related sounds.
+     */
+    muteEndbossSounds() {
+        if (this.endbossMuted) {
+            this.endbossDie_sound.muted = true
+            this.endbossHurt_sound.muted = true
+            this.endbossStart_sound.muted = true
+            this.sound_chickenDead.muted = true
+            this.endbossMuted = false
+        }
+        else {
+            this.endbossDie_sound.muted = false;
+            this.endbossHurt_sound.muted = false;
+            this.endbossStart_sound.muted = false;
+            this.sound_chickenDead.muted = false;
+            this.endbossMuted = true
+        }
+    }
+
+
+    /**
+     * Mutes or unmutes all sounds in the game.
+     * @param {boolean} mute - If true, mutes all sounds. If false, unmutes all sounds.
+     */
+    muteAllSounds(mute) {
+        this.sounds.forEach(sound => {
+            sound.muted = mute;
+        })
+    }
+
+    
+    // Example usage within the game
+    toggleMute() {
+        this.isMuted = !this.isMuted;
+        this.muteAllSounds(this.isMuted);
+    }
+
+        
+    /**
+     * Plays the sound of a chicken dying.
+     */
+    playChickenDieSound() {
+        this.sound_chickenDead.volume = 0.1;
+        this.sound_chickenDead.play();
+    }
 
 
     /**

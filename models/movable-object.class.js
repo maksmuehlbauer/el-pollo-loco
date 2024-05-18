@@ -7,7 +7,7 @@ class MovableObject extends DrawableObject {
     otherDirection = false;
     speedY = 0;
     acceleration = 2.5;
-    energy = 100000;
+    energy = 100;
     lastHit = 0;
     throwSpeed = 20;
     offset = {
@@ -105,8 +105,6 @@ class MovableObject extends DrawableObject {
         let path = images[i];
         this.img = this.imageCache[path]
         this.currentImage++;
-
-        
     }
 
 

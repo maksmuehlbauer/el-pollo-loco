@@ -281,6 +281,15 @@ tbody {
     cursor: pointer;
 }
 
+#mute {
+    position: absolute;
+    width: 25px;
+    bottom: 8px;
+    right: 40px;
+    filter: invert();
+    cursor: pointer;
+}
+
 .btn-animation-over {
     opacity: 0;
     animation: fadeInButtonsOver 1.5s forwards;
@@ -304,6 +313,10 @@ tbody {
 
 
 #fullscreen:hover {
+    transform: scale(1.1);
+}
+
+#mute:hover {
     transform: scale(1.1);
 }
 
@@ -369,4 +382,9 @@ canvas {
 
 #footer a:hover {
     text-decoration: underline;
+}
+
+.no-score h2 {
+    font-size: 24px !important;
+    font-weight: 100;
 }

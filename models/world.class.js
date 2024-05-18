@@ -42,6 +42,14 @@ class World {
         this.bottleCoolDown = 0;
     }
 
+    /**
+     * 
+     */
+    worldSoundMuted() {
+        let endboss = this.level.findEndboss();
+        endboss.muteAllEndbossSounds()
+    }
+
     
     /**
      * Sets the world for the character.
@@ -67,6 +75,7 @@ class World {
      */
     checkThrowObjects() {
         if (this.keyboard.THROW && this.throwableObject.length <= this.bottleCoolDown && this.statusBarBottle.bottlesvAvailable() && !this.character.otherDirection) {
+                this.worldSounds.playThrowSound()
                 this.statusBarBottle.setPercentage(this.statusBarBottle.percentage -= 20);
                 let bottle = new ThrowableObject(this.character.x, this.character.y);
                 this.throwableObject.push(bottle);
@@ -96,9 +105,11 @@ class World {
             this.level.enemies.forEach((enemy, enemyIndex) => {
                 this.throwableObject.forEach((bottle) => {
                     if (bottle.isColliding(enemy)) {
+                        this.worldSounds.playBreakBottleSound()
                         bottle.speedX = 0;
                         this.calculateEnemyDamage(enemy);
                         if (enemy.isDead()) {
+                            this.worldSounds.playChickenDieSound();
                             enemy.markDeadEnemy();
                             this.removeDeadObjectFromWorld(enemy);
                         }
@@ -116,8 +127,8 @@ class World {
             if (this.character.isColliding(enemy)) {
                 if (this.character.isFalling() && enemy !== this.level.findEndboss()) {
                     enemy.hit(20)
-                    
                     if (enemy.isDead()) {
+                        this.worldSounds.playChickenDieSound();
                         enemy.markDeadEnemy();
                         this.removeDeadObjectFromWorld(enemy);
                     }

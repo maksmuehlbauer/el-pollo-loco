@@ -21,7 +21,7 @@ class ChickenSmall extends MovableObject {
     IMAGES_DEAD = [
         'img/3_enemies_chicken/chicken_small/2_dead/dead.png'
     ]
-    sound_chickenDead = new Audio('audio/chicken-dead.mp3');
+    
 
 
     /**
@@ -67,19 +67,8 @@ class ChickenSmall extends MovableObject {
             }
             if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DEAD);
-                this.playChickenDieSound();
                 clearInterval(chickenSmallAnimation)
             }
         }, 250)
     }
-
-
-    /**
-     * Plays the sound of a chicken dying.
-     */
-    playChickenDieSound() {
-        this.sound_chickenDead.volume = 0.1;
-        this.sound_chickenDead.play();
-    }
-
 }
