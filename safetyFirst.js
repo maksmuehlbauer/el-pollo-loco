@@ -132,3 +132,15 @@
     //         }                 
     //     }, 125  )
     // }
+
+
+            // collsionBottleWithTerrain() {
+        //     this.throwableObject.forEach((bottle) => {
+        //         if (!bottle.isInAir()) {
+        //             this.worldSounds.playBreakBottleSound()
+        //             setTimeout(() => {
+                        
+        //             }, 1200);
+        //         }
+        //     })
+        // }

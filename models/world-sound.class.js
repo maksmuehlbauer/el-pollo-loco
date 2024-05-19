@@ -103,6 +103,11 @@ class WorldSounds {
         this.breakingBottle_sound.volume = 0.3
         this.breakingBottle_sound.play();
     }
+
+
+    pauseBreakBottleSound() {
+        this.breakingBottle_sound.pause();
+    }
    
 
     /**

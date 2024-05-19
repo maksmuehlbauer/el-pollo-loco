@@ -16,6 +16,7 @@ function muteAllSounds() {
   toggleSoundImages();
 }
 
+
 /**
  * toggle sound Images on or off
  */
@@ -29,12 +30,12 @@ function toggleSoundImages() {
   }  
 }
 
+
 /**
  * Initializes the canvas element.
  */
 function init() {
     canvas = document.getElementById('canvas');
-    // startGame();
 }
 
 
@@ -99,6 +100,7 @@ function initWorld() {
  */
 function showControls() {
     document.getElementById('movement-box').classList.remove('d-none');
+    document.getElementById('mobile-controls').classList.remove('d-none');
 }
 
 
@@ -212,29 +214,41 @@ function isMobileDevice() {
 
 
 /**
- * Updates the display based on the mobile device orientation.
+ * Adds an event listener that responds to changes in screen orientation.
+ * When the orientation changes to 0 degrees (portrait mode), an element with the ID 'mobile-info' is made visible.
+ * When the orientation changes to any other angle, the element is hidden.
  */
-function updateMobileOrientation() {
-  if (window.orientation === 0) {
-    document.getElementById('mobile-info').classList.remove('d-none')
-  } else if (window.orientation === 90 || window.orientation === -90) {
-    document.getElementById('mobile-info').classList.add('d-none')
-  } 
-}
-
-
-/**
- * Checks the device type and sets up event listener for orientation change if it's a mobile device.
- */
-function checkDeviceOutput() {
-  if (isMobileDevice()) { 
+window.addEventListener("orientationchange", (event) => {
+    if (event.target.screen.orientation.angle === 0) {
       document.getElementById('mobile-info').classList.remove('d-none')
-      window.addEventListener('orientationchange', updateMobileOrientation);
+    } else {
+      document.getElementById('mobile-info').classList.add('d-none')
     }
+  }
+)
+
+/**
+ * Checks the current device type based on the window width.
+ * If the window width is 480 pixels or less, it displays the element with the ID 'mobile-info'.
+ * Otherwise, it hides the element.
+ */
+function checkDeviceType() {
+  const width = window.innerWidth;
+  if (width <= 430) {
+    if (isMobileDevice()) {
+      document.getElementById('mobile-info').classList.remove('d-none')
+    } 
+    
+  } else {
+    document.getElementById('mobile-info').classList.add('d-none')
+
+  }
 }
 
 
-/**
- * Listens for the DOMContentLoaded event and calls checkDeviceOutput when the DOM is fully loaded.
- */
-document.addEventListener('DOMContentLoaded', checkDeviceOutput);
+// Adds an event listener to check the device type whenever the window is resized.
+window.addEventListener('resize', checkDeviceType);
+
+
+// Initial check of the device type when the script is first loaded.
+checkDeviceType();

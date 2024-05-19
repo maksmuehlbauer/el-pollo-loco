@@ -106,7 +106,7 @@ class MovableObject extends DrawableObject {
         this.img = this.imageCache[path]
         this.currentImage++;
     }
-
+    
 
     /**
      * Makes the object jump.
@@ -147,6 +147,17 @@ class MovableObject extends DrawableObject {
     markDeadEnemy() {
         this.speed = 0;
         this.isKilled = true;
+    }
+
+    /**
+     * manage smooth character jumoping animation
+     */
+    characterJumpAnimation() {
+        if (this.speedY > 0) {
+            this.currentImage = 0
+        } else if (this.speedY <= 0) {
+            this.currentImage = 4
+        }
     }
 
 

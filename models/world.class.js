@@ -94,6 +94,7 @@ class World {
                 this.collisionBottleObject();
                 this.collisionCoinObject();
                 this.collisionBottleWithEnemies();
+                // this.collsionBottleWithTerrain();
             }, 1000 / 30);
         }
     

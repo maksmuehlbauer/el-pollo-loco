@@ -3,7 +3,6 @@
  * @extends MovableObject
  */
 class Endboss extends MovableObject {
-    
     y = 125;
     width = 225;
     height = 350;
@@ -90,6 +89,10 @@ class Endboss extends MovableObject {
     }
 
 
+    /**
+     * Manages the animation logic for the end boss encounter.
+     * Determines which animation sequence to play based on various conditions.
+     */
     endbossAnimationLogic() {
         if (this.startBossFight()) {
             this.bossStartSequence();

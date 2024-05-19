@@ -145,8 +145,12 @@ class Character extends MovableObject{
         if (this.world.keyboard.SPACE && !this.isAboveGround()) {
             this.jump();
             this.world.worldSounds.playCharacterJumpSound();
+            this.characterJumpAnimation();
+            
+            
         }
     }
+
 
 
     /**
@@ -156,7 +160,7 @@ class Character extends MovableObject{
         let characterAnimation = setInterval(() => {
             this.world.worldSounds.pauseCharacterSleepingSound();
             this.characterAnimationLogic();
-        }, 125  )
+        }, 125)
     }
 
     /**
