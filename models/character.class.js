@@ -11,8 +11,8 @@ class Character extends MovableObject{
     shortIdleCD = 0;
     longIdleCD = 15;
     offset = {
-        left: 20,
-        right: 45,
+        left: 40,
+        right: 55,
         bottom: 15,
         top: 110,
       }

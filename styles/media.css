@@ -91,14 +91,10 @@
     #status-txt {
         font-size: 40px;
     }
-
-
 }
 
 
 @media only screen and (max-width: 650px) {
-    
-
     .counter-box {
         margin: 0 0 8px 0;
         padding: 8px;
@@ -216,13 +212,13 @@
     }
 }
 
-@media only screen and (max-height: 820px) {
-    #canvas-box {
+@media only screen and (max-height: 480px) {
+    /* #canvas-box {
         height: 100vh;
-    }
+    } */
 
     canvas {
-        height: 100%;
+        height: 100vh;
     }
 
     /* #mobile-info {

@@ -3,12 +3,12 @@
  * @extends MovableObject
  */
 class ChickenSmall extends MovableObject {
-    y = 375;
+    y = 398;
     width = 55;
     height = 55;
     offset = {
-        left: 7,
-        right: 7,
+        left: 12,
+        right: 12,
         bottom: 3,
         top: 5,
       }

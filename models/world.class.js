@@ -5,6 +5,7 @@ class World {
     character = new Character();
     statusBarHp = new StatusBarHp();
     statusBarBottle = new StatusBarBottle();
+    endbossHpStatus = new StatusBarHpEndboss();
     coinCount = new CoinCount();
     chickenCounter = new ChickenCounter();
     playTime = new TimeMeasurement();
@@ -113,11 +114,12 @@ class World {
                             this.worldSounds.playChickenDieSound();
                             enemy.markDeadEnemy();
                             this.removeDeadObjectFromWorld(enemy);
-                        }
+                        } 
                     }
                 });
             });
         }
+
 
 
     /**
@@ -177,6 +179,7 @@ class World {
      */
     calculateEnemyDamage(enemy) {
         if (enemy === this.level.findEndboss()) {
+            this.endbossHpStatus.setPercentage(enemy.energy)
             enemy.hit(1);
         } else if (enemy.energy <= 20){
             enemy.hit(20);
@@ -200,7 +203,7 @@ class World {
     removeDeadObjectFromWorld(enemy) {
         if (enemy === this.level.findEndboss()) {
             setTimeout(() => {
-                this.level.enemies = this.level.enemies.filter(enemy => !enemy.isKilled);
+                enemy.y = -350;
             }, 3000);
         } else {
             setTimeout(() => {
@@ -264,7 +267,24 @@ class World {
         this.drawMap()
         this.ctx.translate(-this.camera_x, 0);
         this.drawHud();
-        this.drawAnimationFrame() 
+        this.drawEndbossHud();
+        this.drawAnimationFrame();
+    }
+
+
+    /**
+     * Draws the heads-up display (HUD) if endboss is alive.
+     */
+    drawEndbossHud() {
+        let endboss = this.level.findEndboss()
+        if (!endboss.isDead() && !this.character.isDead()) {
+            if (endboss.x < 5100) {
+                this.addToMap(this.endbossHpStatus);
+                this.ctx.font = '18px Sancreek';
+                this.ctx.fillStyle = 'white';
+                this.ctx.fillText("Pollo Emperador ", 560, 70);
+            }
+        }
     }
 
 

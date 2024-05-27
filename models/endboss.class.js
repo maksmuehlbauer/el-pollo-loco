@@ -3,7 +3,7 @@
  * @extends MovableObject
  */
 class Endboss extends MovableObject {
-    y = 125;
+    y = 120;
     width = 225;
     height = 350;
     closeRangeToBoss = 100;
